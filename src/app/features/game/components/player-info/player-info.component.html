@@ -1,0 +1,64 @@
+<mat-card
+  [class.current-player]="isCurrentPlayer()"
+  [class.white-player]="color() === 'WHITE'"
+  [class.black-player]="color() === 'BLACK'">
+  <mat-card-content>
+    <div class="player-header">
+      <div class="player-color">
+        <span class="color-label">{{ color() === 'WHITE' ? 'PLAYER 1:' : 'PLAYER 2' }}</span>
+      </div>
+
+      <div class="connection-status">
+        <mat-chip [class.online]="player().isConnected" [class.offline]="!player().isConnected">
+          <mat-icon>{{ getConnectionIcon() }}</mat-icon>
+          <span>{{ getConnectionLabel() }}</span>
+        </mat-chip>
+      </div>
+    </div>
+
+    <div class="player-name">
+      @if (player().username) {
+        <span class="username">{{ player().username }}</span>
+        <span class="player-color-text">({{ color() === 'WHITE' ? 'WHITE' : 'BLACK' }})</span>
+      } @else {
+        <span class="unknown-player">{{ getColorLabel() }}</span>
+        <span class="player-color-text">({{ color() === 'WHITE' ? 'WHITE' : 'BLACK' }})</span>
+      }
+    </div>
+
+    <!-- Captured pieces -->
+    <div class="captured-pieces">
+      <div class="captured-label">CAPTURED PIECES:</div>
+      <div class="pieces-list">
+        @if (player().capturedPieces && hasCapturedPieces()) {
+          <!-- Display each piece individually -->
+          @for (i of getRepeatedArray(player().capturedPieces!.queens); track $index) {
+            <div class="piece-group">
+              <span class="piece-icon">{{ getPieceUnicode('queens') }}</span>
+            </div>
+          }
+          @for (i of getRepeatedArray(player().capturedPieces!.rooks); track $index) {
+            <div class="piece-group">
+              <span class="piece-icon">{{ getPieceUnicode('rooks') }}</span>
+            </div>
+          }
+          @for (i of getRepeatedArray(player().capturedPieces!.bishops); track $index) {
+            <div class="piece-group">
+              <span class="piece-icon">{{ getPieceUnicode('bishops') }}</span>
+            </div>
+          }
+          @for (i of getRepeatedArray(player().capturedPieces!.knights); track $index) {
+            <div class="piece-group">
+              <span class="piece-icon">{{ getPieceUnicode('knights') }}</span>
+            </div>
+          }
+          @for (i of getRepeatedArray(player().capturedPieces!.pawns); track $index) {
+            <div class="piece-group">
+              <span class="piece-icon">{{ getPieceUnicode('pawns') }}</span>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

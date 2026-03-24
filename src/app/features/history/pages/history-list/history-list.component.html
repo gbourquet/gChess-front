@@ -1,0 +1,68 @@
+<div class="history-container">
+  <div class="history-header">
+    <button mat-icon-button (click)="goToDashboard()" aria-label="Retour">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="history-title">Historique des parties</h1>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="60"></mat-spinner>
+      <p>Chargement de l'historique...</p>
+    </div>
+  } @else if (error()) {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <mat-icon color="warn">error</mat-icon>
+        <p>{{ error() }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (entries().length === 0) {
+    <mat-card class="empty-card">
+      <mat-card-content>
+        <mat-icon>inbox</mat-icon>
+        <p>Aucune partie jouée pour l'instant.</p>
+        <button mat-raised-button color="primary" (click)="goToDashboard()">
+          Jouer une partie
+        </button>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <div class="entries-list">
+      @for (entry of entries(); track entry.gameId) {
+        <mat-card class="entry-card" (click)="onGameClick(entry)">
+          <mat-card-content>
+            <div class="entry-row">
+              <div class="result-section">
+                <mat-icon [color]="resultColor(entry.result)">{{ resultIcon(entry.result) }}</mat-icon>
+                <span class="result-label" [class]="'result-' + entry.result.toLowerCase()">
+                  {{ resultLabel(entry.result) }}
+                </span>
+              </div>
+
+              <div class="info-section">
+                <span class="opponent">vs {{ entry.opponentUsername }}</span>
+                <span class="move-count">{{ entry.moveCount }} coups</span>
+              </div>
+
+              <div class="meta-section">
+                @if (entry.timeControlLabel) {
+                  <span class="time-control">
+                    <mat-icon class="small-icon">timer</mat-icon>
+                    {{ entry.timeControlLabel }}
+                  </span>
+                }
+                @if (entry.playedAt) {
+                  <span class="played-at">{{ entry.playedAt | date:'dd/MM/yyyy' }}</span>
+                }
+              </div>
+
+              <mat-icon class="chevron">chevron_right</mat-icon>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

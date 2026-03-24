@@ -1,0 +1,6 @@
+<div class="clock-container"
+     [class]="colorClass()"
+     [class.clock-active]="isActive()"
+     [class.clock-pulsing]="isPulsing()">
+  <span class="clock-time">{{ displayTime() }}</span>
+</div>

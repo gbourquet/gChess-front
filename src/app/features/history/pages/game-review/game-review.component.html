@@ -1,0 +1,79 @@
+<div class="review-container">
+  <div class="review-header">
+    <button mat-icon-button (click)="goBack()" aria-label="Retour">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="review-title">Replay de la partie</h1>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="60"></mat-spinner>
+      <p>Chargement des coups...</p>
+    </div>
+  } @else if (error()) {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <mat-icon color="warn">error</mat-icon>
+        <p>{{ error() }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <div class="review-layout">
+      <div class="board-section">
+        <mat-card class="board-card">
+          <mat-card-content>
+            <app-chess-board
+              [position]="currentFen()"
+              orientation="white"
+              [draggable]="false"
+              [size]="460"
+            />
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Result banner — shown when reaching the final position -->
+        @if (isAtEnd() && resultBanner(); as banner) {
+          <div class="result-banner" [class.draw]="!banner.winnerSide">
+            <mat-icon class="banner-icon">
+              {{ banner.winnerSide ? 'emoji_events' : 'handshake' }}
+            </mat-icon>
+            <div class="banner-text">
+              <span class="banner-main">
+                @if (banner.winnerSide) {
+                  {{ banner.winnerSide }} gagnent · {{ banner.winner }}
+                } @else {
+                  Partie nulle
+                }
+              </span>
+              <span class="banner-reason">{{ banner.reason }}</span>
+            </div>
+          </div>
+        }
+
+        <!-- Navigation controls -->
+        <div class="nav-controls">
+          <button mat-icon-button [disabled]="!canGoPrevious()" (click)="goToFirst()" aria-label="Premier coup">
+            <mat-icon>first_page</mat-icon>
+          </button>
+          <button mat-icon-button [disabled]="!canGoPrevious()" (click)="goToPrevious()" aria-label="Coup précédent">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <span class="move-counter">
+            {{ currentMoveIndex() + 1 }} / {{ moves().length }}
+          </span>
+          <button mat-icon-button [disabled]="!canGoNext()" (click)="goToNext()" aria-label="Coup suivant">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+          <button mat-icon-button [disabled]="!canGoNext()" (click)="goToLast()" aria-label="Dernier coup">
+            <mat-icon>last_page</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="history-section">
+        <app-move-history [moveHistory]="moves()" />
+      </div>
+    </div>
+  }
+</div>

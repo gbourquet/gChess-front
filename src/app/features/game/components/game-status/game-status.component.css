@@ -1,0 +1,144 @@
+.game-status-card {
+  margin-bottom: 4px;
+  background-color: #fff8e7;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  border: none;
+}
+
+.status-container {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+}
+
+.turn-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.turn-indicator mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.turn-indicator mat-icon.white-turn {
+  color: #9b59b6;
+}
+
+.turn-indicator mat-icon.black-turn {
+  color: #5dbb63;
+}
+
+.turn-text {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+mat-chip-set {
+  justify-content: center;
+}
+
+mat-chip {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  min-width: 180px;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.game-over-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  border-radius: 12px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.game-over-message mat-icon {
+  color: white;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .status-container {
+    flex-direction: column;
+    gap: 8px;
+    padding: 4px 8px;
+  }
+
+  .turn-indicator {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .turn-indicator mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  mat-chip {
+    font-size: 11px;
+    padding: 4px 10px;
+    min-width: 150px;
+  }
+
+  .game-over-message {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  .game-over-message mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .status-container {
+    gap: 6px;
+    padding: 3px 6px;
+  }
+
+  .turn-indicator {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  mat-chip {
+    font-size: 10px;
+    padding: 3px 8px;
+    min-width: 120px;
+  }
+
+  .game-over-message {
+    font-size: 10px;
+    padding: 5px 8px;
+  }
+}

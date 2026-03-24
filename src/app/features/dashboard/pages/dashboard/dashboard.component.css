@@ -1,0 +1,120 @@
+.dashboard-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.welcome-section {
+  width: 100%;
+}
+
+.welcome-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.welcome-card mat-card-header {
+  margin-bottom: 16px;
+}
+
+.welcome-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 28px;
+  color: white;
+}
+
+.welcome-card mat-card-title mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.user-info {
+  font-size: 18px;
+  margin: 8px 0;
+}
+
+.user-email {
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 4px 0;
+}
+
+.actions-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.action-card {
+  height: 100%;
+}
+
+.action-card mat-card-header {
+  margin-bottom: 16px;
+}
+
+.action-card mat-card-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.action-card mat-card-content p {
+  margin: 0 0 16px 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.find-game-button {
+  width: 100%;
+  height: 56px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.find-game-button mat-icon {
+  margin-right: 8px;
+}
+
+.instructions {
+  margin: 16px 0;
+  padding-left: 20px;
+}
+
+.instructions li {
+  margin: 8px 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.footer-section {
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
+}
+
+.footer-section button {
+  min-width: 200px;
+}
+
+.footer-section button mat-icon {
+  margin-right: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 16px;
+  }
+
+  .actions-section {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-card mat-card-title {
+    font-size: 24px;
+  }
+}

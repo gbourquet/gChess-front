@@ -1,0 +1,110 @@
+.history-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.history-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.loading-state, .error-card mat-card-content, .empty-card mat-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 16px;
+}
+
+.entries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.entry-card {
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.entry-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.entry-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.result-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+}
+
+.result-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.result-win { color: #4caf50; }
+.result-loss { color: #f44336; }
+.result-draw { color: #2196f3; }
+
+.info-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.opponent {
+  font-weight: 500;
+}
+
+.move-count {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.meta-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 80px;
+}
+
+.time-control {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.8rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+}
+
+.small-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.played-at {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.chevron {
+  color: rgba(0, 0, 0, 0.38);
+}

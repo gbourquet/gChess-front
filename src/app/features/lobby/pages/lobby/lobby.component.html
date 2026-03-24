@@ -1,0 +1,47 @@
+<div class="lobby-container">
+  <mat-card class="lobby-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>sports_esports</mat-icon>
+        Choisir un contrôle du temps
+      </mat-card-title>
+      <mat-card-subtitle>Sélectionnez la cadence de jeu</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @for (category of categories; track category) {
+        <div class="category-section">
+          <h3 class="category-title">{{ categoryLabels[category] }}</h3>
+          <div class="presets-row">
+            @for (preset of presetsByCategory(category); track preset.label) {
+              <button
+                mat-raised-button
+                class="preset-button"
+                (click)="onPresetSelect(preset)">
+                {{ preset.label }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="custom-section">
+        <button
+          mat-stroked-button
+          color="accent"
+          class="custom-button"
+          (click)="onCustomGame()">
+          <mat-icon>tune</mat-icon>
+          Partie personnalisée
+        </button>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button color="warn" (click)="authService.logout()">
+        <mat-icon>logout</mat-icon>
+        Se déconnecter
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

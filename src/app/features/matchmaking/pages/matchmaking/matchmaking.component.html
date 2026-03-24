@@ -1,0 +1,76 @@
+<div class="matchmaking-container">
+  <mat-card class="matchmaking-card">
+    <mat-card-header>
+      <mat-card-title>Recherche d'adversaire</mat-card-title>
+      <mat-card-subtitle>Matchmaking</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Connection indicator -->
+      <div class="connection-status">
+        <app-connection-indicator [connectionState]="wsService.connectionState()" />
+      </div>
+
+      <!-- Joining queue -->
+      @if (queueState().status === 'joining') {
+        <div class="loading-state">
+          <mat-spinner diameter="60"></mat-spinner>
+          <p class="info-text">Connexion à la file d'attente...</p>
+        </div>
+      }
+
+      <!-- In queue -->
+      @if (queueState().status === 'in_queue') {
+        <div class="in-queue-state">
+          <mat-spinner diameter="80" color="accent"></mat-spinner>
+          <h2 class="queue-title">En attente d'un adversaire</h2>
+          @if (queueState().timeControlLabel) {
+            <p class="time-control-badge">
+              <mat-icon>timer</mat-icon>
+              {{ queueState().timeControlLabel }}
+            </p>
+          }
+          @if (queueState().position !== null) {
+            <p class="queue-position">
+              Position dans la file : <strong>{{ queueState().position }}</strong>
+            </p>
+          }
+          <p class="info-text">Nous cherchons un adversaire à votre niveau...</p>
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="onLeaveQueue()"
+            class="cancel-button">
+            Annuler
+          </button>
+        </div>
+      }
+
+      <!-- Match found -->
+      @if (queueState().status === 'match_found') {
+        <div class="match-found-state">
+          <mat-icon class="large-icon success">check_circle</mat-icon>
+          <h2 class="success-title">Adversaire trouvé !</h2>
+          <p class="info-text">Chargement de la partie...</p>
+          <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+        </div>
+      }
+
+      <!-- Error state -->
+      @if (queueState().status === 'error') {
+        <div class="error-state">
+          <mat-icon class="large-icon error">error</mat-icon>
+          <h2 class="error-title">Erreur</h2>
+          <p class="error-text">{{ queueState().error || 'Une erreur est survenue' }}</p>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onRetry()"
+            class="action-button">
+            Réessayer
+          </button>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

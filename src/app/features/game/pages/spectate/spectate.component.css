@@ -1,0 +1,187 @@
+.spectate-container {
+  padding: 8px;
+  max-width: 1600px;
+  margin: 0 auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.spectator-badge {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.spectator-badge mat-chip-set {
+  justify-content: center;
+}
+
+.spectator-badge mat-chip {
+  font-size: 13px;
+  padding: 10px 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.spectator-badge mat-chip mat-icon {
+  margin-right: 8px;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  align-items: start;
+}
+
+.sidebar-left,
+.sidebar-right {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.board-center {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  min-height: 0;
+}
+
+.status-section {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 550px;
+}
+
+.board-card {
+  width: fit-content;
+  position: relative;
+  background-color: #fff8e7;
+  border-radius: 24px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  border: none;
+  flex-shrink: 0;
+}
+
+.board-card mat-card-content {
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Read-only overlay indicator (subtle) */
+.board-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  border: 3px solid rgba(103, 58, 183, 0.3);
+  border-radius: 24px;
+}
+
+.history-section {
+  width: 100%;
+  max-width: 550px;
+  height: 180px;
+  flex-shrink: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.actions button {
+  min-width: 220px;
+  border-radius: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 20px;
+  font-size: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  height: 40px;
+}
+
+.actions button mat-icon {
+  margin-right: 6px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.loading-card {
+  margin: 64px auto;
+  max-width: 400px;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+  text-align: center;
+}
+
+.loading-content mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: rgba(103, 58, 183, 0.7);
+  animation: spin 2s linear infinite;
+}
+
+.loading-content h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.loading-content p {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  mat-grid-list {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  mat-grid-tile {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .board-content {
+    order: 1;
+  }
+
+  .sidebar-content {
+    order: 2;
+  }
+}

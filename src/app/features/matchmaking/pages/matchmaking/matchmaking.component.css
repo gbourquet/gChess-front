@@ -1,0 +1,162 @@
+.matchmaking-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.matchmaking-card {
+  max-width: 600px;
+  width: 100%;
+  min-height: 400px;
+  background-color: #fff8e7;
+  border-radius: 24px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border: none;
+}
+
+mat-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-top: 12px;
+}
+
+mat-card-title {
+  font-size: 28px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+mat-card-subtitle {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+.connection-status {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+/* Common states styling */
+.loading-state,
+.in-queue-state,
+.match-found-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 32px 16px;
+}
+
+.large-icon {
+  font-size: 80px;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 24px;
+}
+
+.large-icon.success {
+  color: #4caf50;
+}
+
+.large-icon.error {
+  color: #f44336;
+}
+
+.info-text {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 16px 0;
+}
+
+.queue-title,
+.success-title,
+.error-title {
+  font-size: 22px;
+  font-weight: 500;
+  margin: 16px 0;
+}
+
+.success-title {
+  color: #4caf50;
+}
+
+.error-title {
+  color: #f44336;
+}
+
+.queue-position {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.8);
+  margin: 12px 0;
+}
+
+.queue-position strong {
+  color: #3f51b5;
+  font-size: 24px;
+}
+
+.error-text {
+  font-size: 14px;
+  color: #f44336;
+  margin: 12px 0;
+  padding: 16px;
+  background-color: #ffebee;
+  border-radius: 4px;
+}
+
+/* Buttons */
+.action-button,
+.cancel-button {
+  margin-top: 24px;
+  min-width: 200px;
+  height: 48px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.action-button mat-icon {
+  margin-right: 8px;
+}
+
+/* Spinners */
+mat-spinner {
+  margin-bottom: 24px;
+}
+
+mat-progress-bar {
+  margin-top: 24px;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .matchmaking-card {
+    max-width: 100%;
+  }
+
+  .large-icon {
+    font-size: 60px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .queue-title,
+  .success-title,
+  .error-title {
+    font-size: 20px;
+  }
+}
