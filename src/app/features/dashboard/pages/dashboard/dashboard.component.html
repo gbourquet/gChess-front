@@ -1,0 +1,61 @@
+<div class="dashboard-container">
+  <div class="welcome-section">
+    <mat-card class="welcome-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>sports_esports</mat-icon>
+          Bienvenue sur gChess
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (currentUser(); as user) {
+          <p class="user-info">Connecté en tant que: <strong>{{ user.username }}</strong></p>
+          <p class="user-email">{{ user.email }}</p>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="actions-section">
+    <mat-card class="action-card">
+      <mat-card-header>
+        <mat-card-title>Jouer une partie</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Choisissez votre cadence et trouvez un adversaire.</p>
+        <button
+          mat-raised-button
+          color="primary"
+          class="find-game-button"
+          (click)="findGame()">
+          <mat-icon>search</mat-icon>
+          Trouver une partie
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="action-card">
+      <mat-card-header>
+        <mat-card-title>Historique</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Consultez et rejouez vos parties précédentes.</p>
+        <button
+          mat-raised-button
+          color="accent"
+          class="find-game-button"
+          (click)="viewHistory()">
+          <mat-icon>history</mat-icon>
+          Voir l'historique
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="footer-section">
+    <button mat-stroked-button color="warn" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Déconnexion
+    </button>
+  </div>
+</div>

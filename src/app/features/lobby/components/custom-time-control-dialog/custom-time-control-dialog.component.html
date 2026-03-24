@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Partie personnalisée</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="custom-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Temps par joueur (minutes)</mat-label>
+      <input matInput type="number" formControlName="totalTimeMinutes" min="1" max="180" />
+      @if (form.controls.totalTimeMinutes.hasError('min') || form.controls.totalTimeMinutes.hasError('max')) {
+        <mat-error>Entre 1 et 180 minutes</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Incrément par coup (secondes)</mat-label>
+      <input matInput type="number" formControlName="incrementSeconds" min="0" max="60" />
+      @if (form.controls.incrementSeconds.hasError('min') || form.controls.incrementSeconds.hasError('max')) {
+        <mat-error>Entre 0 et 60 secondes</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Annuler</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="confirm()">
+    Jouer
+  </button>
+</mat-dialog-actions>

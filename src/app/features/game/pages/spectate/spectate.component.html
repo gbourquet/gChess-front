@@ -1,0 +1,84 @@
+<div class="spectate-container">
+  @if (spectatorState(); as state) {
+    <!-- Spectator mode indicator -->
+    <div class="spectator-badge">
+      <mat-chip-set>
+        <mat-chip color="accent" highlighted>
+          <mat-icon>visibility</mat-icon>
+          Mode Spectateur
+        </mat-chip>
+      </mat-chip-set>
+    </div>
+
+    <!-- Main game area -->
+    <div class="game-grid">
+      <!-- Left sidebar: White player -->
+      <div class="sidebar-left">
+        <app-player-info
+          [player]="state.whitePlayer"
+          [color]="'WHITE'"
+          [isCurrentPlayer]="state.currentSide === 'WHITE'"
+        />
+      </div>
+
+      <!-- Center: Chess board and move history -->
+      <div class="board-center">
+        <!-- Game Status -->
+        <div class="status-section">
+          <app-game-status
+            [currentSide]="state.currentSide"
+            [gameStatus]="state.gameStatus"
+            [isMyTurn]="false"
+            [isCheck]="state.isCheck"
+          />
+        </div>
+
+        <!-- Chess board (read-only) -->
+        <mat-card class="board-card">
+          <mat-card-content>
+            <app-chess-board
+              [position]="state.currentPositionFen"
+              [orientation]="'white'"
+              [draggable]="false"
+              [size]="480"
+              [lastMove]="state.lastMove"
+            />
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Move history below board -->
+        <div class="history-section">
+          <app-move-history [moveHistory]="state.moveHistory" />
+        </div>
+
+        <!-- Action buttons -->
+        <div class="actions">
+          <button mat-raised-button color="primary" (click)="leaveSpectate()">
+            <mat-icon>exit_to_app</mat-icon>
+            Quitter le mode spectateur
+          </button>
+        </div>
+      </div>
+
+      <!-- Right sidebar: Black player -->
+      <div class="sidebar-right">
+        <app-player-info
+          [player]="state.blackPlayer"
+          [color]="'BLACK'"
+          [isCurrentPlayer]="state.currentSide === 'BLACK'"
+        />
+      </div>
+    </div>
+  } @else {
+    <!-- Loading state -->
+    <mat-card class="loading-card">
+      <mat-card-content>
+        <div class="loading-content">
+          <mat-icon>hourglass_empty</mat-icon>
+          <h2>Connexion à la partie...</h2>
+          <p>Chargement du mode spectateur</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

@@ -1,0 +1,73 @@
+h2 {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.promotion-message {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.promotion-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.piece-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  min-height: 120px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.piece-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.piece-symbol {
+  font-size: 64px;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.piece-label {
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+mat-dialog-content {
+  padding: 20px 24px;
+  min-width: 400px;
+}
+
+mat-dialog-actions {
+  padding: 8px 24px 16px;
+}
+
+@media (max-width: 500px) {
+  mat-dialog-content {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .promotion-options {
+    grid-template-columns: 1fr;
+  }
+
+  .piece-button {
+    min-height: 100px;
+  }
+
+  .piece-symbol {
+    font-size: 48px;
+  }
+}

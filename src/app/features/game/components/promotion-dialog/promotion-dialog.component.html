@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Promotion du pion</h2>
+
+<mat-dialog-content>
+  <p class="promotion-message">Choisissez la pièce de promotion :</p>
+
+  <div class="promotion-options">
+    @for (option of promotionOptions; track option.type) {
+      <button
+        mat-raised-button
+        class="piece-button"
+        (click)="selectPiece(option.type)">
+        <span class="piece-symbol">{{ option.symbol }}</span>
+        <span class="piece-label">{{ option.label }}</span>
+      </button>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Annuler</button>
+</mat-dialog-actions>

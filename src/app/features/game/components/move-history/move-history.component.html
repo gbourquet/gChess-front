@@ -1,0 +1,26 @@
+<mat-card class="move-history-card">
+  <div class="history-header">
+    <span class="history-title">MOVE HISTORY</span>
+  </div>
+  <mat-card-content #moveListContainer>
+    @if (isEmpty()) {
+      <div class="empty-message">
+        <span>No moves yet</span>
+      </div>
+    } @else {
+      <mat-list class="move-list">
+        @for (pair of movePairs(); track pair.number) {
+          <mat-list-item>
+            <div class="move-pair">
+              <span class="move-number">{{ pair.number }}.</span>
+              <span class="move white-move">{{ formatMove(pair.white) }}</span>
+              @if (pair.black) {
+                <span class="move black-move">{{ formatMove(pair.black) }}</span>
+              }
+            </div>
+          </mat-list-item>
+        }
+      </mat-list>
+    }
+  </mat-card-content>
+</mat-card>

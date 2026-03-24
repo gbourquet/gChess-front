@@ -1,0 +1,41 @@
+<div class="chess-board-wrapper">
+  <div class="board-with-coordinates">
+    <!-- Top file labels (a-h) -->
+    <div class="coordinates-top">
+      <div class="corner-spacer"></div>
+      @for (file of files(); track file) {
+        <div class="file-label">{{ file }}</div>
+      }
+      <div class="corner-spacer"></div>
+    </div>
+
+    <!-- Board with side labels -->
+    <div class="board-row">
+      <!-- Left rank labels (8-1) -->
+      <div class="coordinates-left">
+        @for (rank of ranks(); track rank) {
+          <div class="rank-label">{{ rank }}</div>
+        }
+      </div>
+
+      <!-- Chess board -->
+      <div #boardContainer class="board-container"></div>
+
+      <!-- Right rank labels (8-1) -->
+      <div class="coordinates-right">
+        @for (rank of ranks(); track rank) {
+          <div class="rank-label">{{ rank }}</div>
+        }
+      </div>
+    </div>
+
+    <!-- Bottom file labels (a-h) -->
+    <div class="coordinates-bottom">
+      <div class="corner-spacer"></div>
+      @for (file of files(); track file) {
+        <div class="file-label">{{ file }}</div>
+      }
+      <div class="corner-spacer"></div>
+    </div>
+  </div>
+</div>

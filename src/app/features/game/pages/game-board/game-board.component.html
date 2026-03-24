@@ -1,0 +1,163 @@
+<div class="game-board-container">
+  @if (gameState(); as state) {
+    <!-- Main game area -->
+    <div class="game-grid">
+      <!-- Left sidebar: White player -->
+      <div class="sidebar-left">
+        @if (state.myColor === 'WHITE') {
+          @if (myPlayer(); as player) {
+            <app-player-info
+              [player]="player"
+              [color]="'WHITE'"
+              [isCurrentPlayer]="state.currentSide === 'WHITE'"
+            />
+          }
+        } @else {
+          @if (opponentPlayer(); as opponent) {
+            <app-player-info
+              [player]="opponent"
+              [color]="'WHITE'"
+              [isCurrentPlayer]="state.currentSide === 'WHITE'"
+            />
+          }
+        }
+        @if (whiteTimeMs() !== null) {
+          <app-game-clock
+            [remainingMs]="whiteTimeMs()"
+            [isActive]="state.currentSide === 'WHITE'"
+          />
+        }
+      </div>
+
+      <!-- Center: Chess board and move history -->
+      <div class="board-center">
+        <!-- Game Status -->
+        <div class="status-section">
+          <app-game-status
+            [currentSide]="state.currentSide"
+            [gameStatus]="state.gameStatus"
+            [isMyTurn]="isMyTurn() ?? false"
+            [isCheck]="state.isCheck"
+          />
+        </div>
+
+        <!-- Chess board -->
+        <mat-card class="board-card">
+          <mat-card-content>
+            <app-chess-board
+              [position]="displayPosition()"
+              [orientation]="myOrientation()"
+              [draggable]="isAtLatestMove() && (isMyTurn() ?? false) && (state.gameStatus === 'IN_PROGRESS' || state.gameStatus === 'CHECK')"
+              [size]="boardSize()"
+              [lastMove]="displayLastMove()"
+              (moveChange)="onMoveAttempt($event)"
+            />
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Move navigation controls -->
+        <div class="move-navigation">
+          <button
+            mat-raised-button
+            [disabled]="!canGoPrevious()"
+            (click)="goToPreviousMove()"
+            aria-label="Coup précédent">
+            <mat-icon>chevron_left</mat-icon>
+            Précédent
+          </button>
+          <button
+            mat-raised-button
+            [disabled]="!canGoNext()"
+            (click)="goToNextMove()"
+            aria-label="Coup suivant">
+            Suivant
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+
+        <!-- Move history below board -->
+        <div class="history-section">
+          <app-move-history [moveHistory]="state.moveHistory" />
+        </div>
+
+        <!-- Draw offer notification -->
+        @if (state.pendingDrawOffer && state.pendingDrawOffer.offeredByPlayerId !== state.myPlayerId) {
+          <mat-card class="draw-offer-card">
+            <mat-card-content>
+              <div class="draw-offer-content">
+                <mat-icon color="primary">handshake</mat-icon>
+                <p>Votre adversaire vous propose la nulle</p>
+                <div class="draw-offer-actions">
+                  <button mat-raised-button color="primary" (click)="acceptDrawOffer()">
+                    <mat-icon>check</mat-icon>
+                    Accepter
+                  </button>
+                  <button mat-raised-button (click)="rejectDrawOffer()">
+                    <mat-icon>close</mat-icon>
+                    Refuser
+                  </button>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+
+        <!-- Action buttons -->
+        <div class="actions">
+          @if (state.gameStatus === 'IN_PROGRESS' || state.gameStatus === 'CHECK') {
+            <button mat-raised-button color="accent" (click)="offerDraw()" [disabled]="!!state.pendingDrawOffer">
+              <mat-icon>handshake</mat-icon>
+              Proposer la nulle
+            </button>
+            <button mat-raised-button color="warn" (click)="resign()">
+              <mat-icon>flag</mat-icon>
+              Abandonner
+            </button>
+          }
+          <button mat-raised-button (click)="leaveGame()">
+            <mat-icon>exit_to_app</mat-icon>
+            Quitter la partie
+          </button>
+        </div>
+      </div>
+
+      <!-- Right sidebar: Black player -->
+      <div class="sidebar-right">
+        @if (state.myColor === 'BLACK') {
+          @if (myPlayer(); as player) {
+            <app-player-info
+              [player]="player"
+              [color]="'BLACK'"
+              [isCurrentPlayer]="state.currentSide === 'BLACK'"
+            />
+          }
+        } @else {
+          @if (opponentPlayer(); as opponent) {
+            <app-player-info
+              [player]="opponent"
+              [color]="'BLACK'"
+              [isCurrentPlayer]="state.currentSide === 'BLACK'"
+            />
+          }
+        }
+        @if (blackTimeMs() !== null) {
+          <app-game-clock
+            [remainingMs]="blackTimeMs()"
+            [isActive]="state.currentSide === 'BLACK'"
+          />
+        }
+      </div>
+    </div>
+  } @else {
+    <!-- Loading state -->
+    <mat-card class="loading-card">
+      <mat-card-content>
+        <div class="loading-content">
+          <mat-icon>hourglass_empty</mat-icon>
+          <h2>Chargement de la partie...</h2>
+          <p>Connexion au serveur en cours</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

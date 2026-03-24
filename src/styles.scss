@@ -1,0 +1,59 @@
+// Import custom variables
+@use './styles/variables' as vars;
+
+// Import Material theme configuration
+@use './styles/material-theme';
+
+// Global styles
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: linear-gradient(135deg, #a8d8ea 0%, #b8e6d5 50%, #d4e09b 100%);
+  background-attachment: fixed;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+// Global utilities
+.full-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-1 { margin-top: vars.$spacing-sm; }
+.mt-2 { margin-top: vars.$spacing-md; }
+.mt-3 { margin-top: vars.$spacing-lg; }
+
+.mb-1 { margin-bottom: vars.$spacing-sm; }
+.mb-2 { margin-bottom: vars.$spacing-md; }
+.mb-3 { margin-bottom: vars.$spacing-lg; }
+
+.p-1 { padding: vars.$spacing-sm; }
+.p-2 { padding: vars.$spacing-md; }
+.p-3 { padding: vars.$spacing-lg; }
+
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

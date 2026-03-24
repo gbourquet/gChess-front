@@ -1,0 +1,46 @@
+.lobby-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 24px 16px;
+}
+
+.lobby-card {
+  width: 100%;
+  max-width: 560px;
+}
+
+.category-section {
+  margin-bottom: 24px;
+}
+
+.category-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--mat-primary-text-color, #555);
+  margin: 0 0 10px 0;
+}
+
+.presets-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.preset-button {
+  min-width: 72px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
+}
+
+.custom-section {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.custom-button {
+  width: 100%;
+}
