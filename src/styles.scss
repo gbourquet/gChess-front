@@ -4,6 +4,23 @@
 // Import Material theme configuration
 @use './styles/material-theme';
 
+// CSS Custom Properties - Grandmaster's Club palette
+:root {
+  --wood-darkest: #1a0f06;
+  --wood-dark: #2c1810;
+  --wood-mid: #5c3a1e;
+  --wood-light: #8b6343;
+  --wood-frame: #4a2810;
+  --paper-light: #f5ead7;
+  --paper-bg: #fdf6e3;
+  --paper-dark: #e8d5b0;
+  --gold: #c9a84c;
+  --gold-bright: #f0c040;
+  --gold-dark: #8b6914;
+  --cream: #f5ead7;
+  --ink: #1a0f06;
+}
+
 // Global styles
 html, body {
   height: 100%;
@@ -12,10 +29,12 @@ html, body {
 }
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background: linear-gradient(135deg, #a8d8ea 0%, #b8e6d5 50%, #d4e09b 100%);
+  font-family: 'Crimson Text', Georgia, serif;
+  background-color: var(--wood-darkest);
+  background-image: radial-gradient(ellipse at 30% 20%, rgba(92,58,30,0.3) 0%, transparent 60%),
+                    radial-gradient(ellipse at 70% 80%, rgba(44,24,16,0.4) 0%, transparent 50%);
   background-attachment: fixed;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--cream);
 }
 
 // Global utilities
@@ -39,21 +58,21 @@ body {
 .p-2 { padding: vars.$spacing-md; }
 .p-3 { padding: vars.$spacing-lg; }
 
-// Scrollbar styling
+// Scrollbar styling - wood tones
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--wood-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--wood-mid);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--wood-light);
 }

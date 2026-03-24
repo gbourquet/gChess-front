@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { TokenStorageService } from './token-storage.service';
 import { User, LoginRequest, LoginResponse, RegisterRequest } from '../models';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 
 /**
  * Authentication service using Angular signals for state management
@@ -34,14 +34,25 @@ export class AuthService {
   }
 
   /**
-   * Initialize user from stored token on app startup
+   * Initialize user from stored token on app startup.
+   * Clears storage if token is missing or expired.
    */
   private initializeUser(): void {
     const user = this.tokenStorage.getUser();
-    if (user && this.tokenStorage.hasToken()) {
-      // Restore user from localStorage
+    const token = this.tokenStorage.getToken();
+    if (user && token && !this.isTokenExpired(token)) {
       this.currentUserSignal.set(user);
-      console.log('User restored from localStorage:', user);
+    } else {
+      this.tokenStorage.clear();
+    }
+  }
+
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 < Date.now();
+    } catch {
+      return true;
     }
   }
 

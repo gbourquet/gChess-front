@@ -34,6 +34,7 @@ export interface GameState {
   blackTimeRemainingMs?: number;
   totalTimeSeconds?: number;
   incrementSeconds?: number;
+  loserPlayerId?: string;
 }
 
 /**

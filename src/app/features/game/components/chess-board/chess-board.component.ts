@@ -3,6 +3,7 @@ import {
   input,
   output,
   effect,
+  signal,
   AfterViewInit,
   OnDestroy,
   ElementRef,
@@ -43,9 +44,15 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
   draggable = input<boolean>(true);
   size = input<number>(600);
   lastMove = input<LastMove | null>(null); // Highlight last move
+  isCheck = input<boolean>(false);
+  currentSide = input<'white' | 'black'>('white');
 
   // Outputs
   moveChange = output<MoveEvent>();
+  flipRequest = output<void>();
+
+  // Local state
+  showCoords = signal(true);
 
   // View references
   boardContainer = viewChild.required<ElementRef>('boardContainer');
@@ -82,6 +89,22 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
         this.renderBoard();
       }
     });
+
+    // React to isCheck changes
+    effect(() => {
+      const check = this.isCheck();
+      if (this.boardInitialized) {
+        this.renderBoard();
+      }
+    });
+  }
+
+  toggleCoords(): void {
+    this.showCoords.update(v => !v);
+  }
+
+  onFlipRequest(): void {
+    this.flipRequest.emit();
   }
 
   /**
@@ -186,17 +209,52 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
         square.style.userSelect = 'none';
         square.style.transition = 'background-color 0.2s ease, box-shadow 0.2s ease';
 
+        // Check king-in-check highlight
+        const inCheck = this.isCheck();
+        if (inCheck) {
+          const kingChar = this.currentSide() === 'white' ? 'K' : 'k';
+          const pieceHere = position[boardRow]?.[boardCol];
+          if (pieceHere === kingChar) {
+            square.style.backgroundColor = 'rgba(220, 50, 50, 0.75)';
+            square.style.boxShadow = 'inset 0 0 12px 4px rgba(255,0,0,0.6)';
+          }
+        }
+
         square.title = squareNotation;
         square.dataset['square'] = squareNotation;
 
         // Add piece if present
         const piece = position[boardRow]?.[boardCol];
         if (piece) {
+          const isWhitePiece = piece === piece.toUpperCase();
+
+          // Halo wrapper
+          const halo = document.createElement('div');
+          halo.style.width = '100%';
+          halo.style.height = '100%';
+          halo.style.display = 'flex';
+          halo.style.alignItems = 'center';
+          halo.style.justifyContent = 'center';
+          halo.style.background = isWhitePiece
+            ? 'radial-gradient(circle, rgba(0,0,0,0.28) 28%, transparent 65%)'
+            : 'radial-gradient(circle, rgba(255,245,220,0.32) 28%, transparent 65%)';
+
           const pieceElement = document.createElement('span');
           pieceElement.textContent = this.getPieceUnicode(piece);
           pieceElement.style.fontSize = '48px';
           pieceElement.style.lineHeight = '1';
-          square.appendChild(pieceElement);
+          pieceElement.style.display = 'block';
+
+          if (isWhitePiece) {
+            pieceElement.style.color = '#ffffff';
+            pieceElement.style.filter = 'drop-shadow(0 1px 1px rgba(0,0,0,0.95))';
+          } else {
+            pieceElement.style.color = '#160800';
+            pieceElement.style.filter = 'drop-shadow(0 1px 1px rgba(245,237,224,0.9))';
+          }
+
+          halo.appendChild(pieceElement);
+          square.appendChild(halo);
         }
 
         // Add click handler for moves
@@ -243,8 +301,9 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
   }
 
   private getPieceUnicode(piece: string): string {
+    // Use filled (solid) glyphs for both colors — white pieces are colored white via CSS
     const pieces: { [key: string]: string } = {
-      'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
+      'K': '♚', 'Q': '♛', 'R': '♜', 'B': '♝', 'N': '♞', 'P': '♟',
       'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
     };
     return pieces[piece] || '';

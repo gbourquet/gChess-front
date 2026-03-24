@@ -6,13 +6,14 @@
 }
 
 .login-card {
-  max-width: 400px;
+  max-width: 420px;
   width: 100%;
   margin: 20px;
-  background-color: #fff8e7;
-  border-radius: 24px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  border: none;
+  background: rgba(44,24,16,0.95);
+  border: 1px solid var(--gold-dark, #8b6914);
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  overflow: hidden;
 }
 
 mat-card-header {
@@ -20,21 +21,25 @@ mat-card-header {
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
-  padding-top: 12px;
+  padding-top: 28px;
+  padding-bottom: 16px;
+  background: linear-gradient(to bottom, var(--wood-dark, #2c1810), transparent);
+  border-bottom: 1px solid var(--wood-mid, #5c3a1e);
 }
 
 mat-card-title {
+  font-family: 'Playfair Display', Georgia, serif;
   font-size: 28px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-weight: 700;
+  letter-spacing: 1px;
   margin-bottom: 8px;
-  color: rgba(0, 0, 0, 0.85);
+  color: var(--gold, #c9a84c);
 }
 
 mat-card-subtitle {
+  font-family: 'Crimson Text', Georgia, serif;
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--wood-light, #8b6343);
   font-weight: 500;
 }
 
@@ -43,18 +48,28 @@ mat-card-subtitle {
 }
 
 mat-form-field {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .submit-button {
   margin-top: 8px;
   height: 48px;
-  border-radius: 16px;
+  border-radius: 5px;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 14px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 13px;
+  background: linear-gradient(135deg, var(--wood-mid, #5c3a1e), var(--wood-dark, #2c1810));
+  color: var(--gold, #c9a84c);
+  border: 1px solid var(--gold-dark, #8b6914);
+  transition: all 0.2s;
+
+  &:hover:not([disabled]) {
+    background: linear-gradient(135deg, var(--wood-light, #8b6343), var(--wood-mid, #5c3a1e));
+    color: var(--gold-bright, #f0c040);
+    border-color: var(--gold, #c9a84c);
+  }
 }
 
 .submit-button mat-spinner {
@@ -64,20 +79,24 @@ mat-form-field {
 
 .register-link {
   text-align: center;
-  margin-top: 24px;
+  margin-top: 20px;
+  padding: 0 0 4px;
 }
 
 .register-link p {
   margin: 0;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--wood-light, #8b6343);
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 14px;
 }
 
 .register-link a {
-  color: #3f51b5;
+  color: var(--gold, #c9a84c);
   text-decoration: none;
-  font-weight: 500;
-}
+  font-weight: 600;
 
-.register-link a:hover {
-  text-decoration: underline;
+  &:hover {
+    color: var(--gold-bright, #f0c040);
+    text-decoration: underline;
+  }
 }

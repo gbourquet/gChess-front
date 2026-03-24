@@ -1,6 +1,4 @@
 import { Component, input, computed } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Color } from '../../../../core/websocket/models';
@@ -13,7 +11,7 @@ import { PlayerInfo } from '../../models';
 @Component({
   selector: 'app-player-info',
   standalone: true,
-  imports: [MatCardModule, MatChipsModule, MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule],
   templateUrl: './player-info.component.html',
   styleUrl: './player-info.component.css'
 })

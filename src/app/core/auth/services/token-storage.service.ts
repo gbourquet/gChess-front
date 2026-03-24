@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../models';
 
 /**
- * Service for managing JWT token and user data storage in localStorage
+ * Service for managing JWT token and user data storage in sessionStorage
  */
 @Injectable({
   providedIn: 'root'
@@ -12,61 +12,61 @@ export class TokenStorageService {
   private readonly USER_KEY = 'gchess_user';
 
   /**
-   * Store JWT token in localStorage
+   * Store JWT token in sessionStorage
    */
   saveToken(token: string): void {
-    localStorage.setItem(this.TOKEN_KEY, token);
+    sessionStorage.setItem(this.TOKEN_KEY, token);
   }
 
   /**
-   * Retrieve JWT token from localStorage
+   * Retrieve JWT token from sessionStorage
    */
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    return sessionStorage.getItem(this.TOKEN_KEY);
   }
 
   /**
-   * Remove JWT token from localStorage
+   * Remove JWT token from sessionStorage
    */
   removeToken(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
+    sessionStorage.removeItem(this.TOKEN_KEY);
   }
 
   /**
-   * Check if token exists in localStorage
+   * Check if token exists in sessionStorage
    */
   hasToken(): boolean {
     return !!this.getToken();
   }
 
   /**
-   * Store user data in localStorage
+   * Store user data in sessionStorage
    */
   saveUser(user: User): void {
-    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+    sessionStorage.setItem(this.USER_KEY, JSON.stringify(user));
   }
 
   /**
-   * Retrieve user data from localStorage
+   * Retrieve user data from sessionStorage
    */
   getUser(): User | null {
-    const userJson = localStorage.getItem(this.USER_KEY);
+    const userJson = sessionStorage.getItem(this.USER_KEY);
     if (!userJson) {
       return null;
     }
     try {
       return JSON.parse(userJson) as User;
     } catch (error) {
-      console.error('Error parsing user from localStorage', error);
+      console.error('Error parsing user from sessionStorage', error);
       return null;
     }
   }
 
   /**
-   * Remove user data from localStorage
+   * Remove user data from sessionStorage
    */
   removeUser(): void {
-    localStorage.removeItem(this.USER_KEY);
+    sessionStorage.removeItem(this.USER_KEY);
   }
 
   /**

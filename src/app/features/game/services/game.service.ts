@@ -2,7 +2,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { Subject, Subscription, interval, takeUntil } from 'rxjs';
 import { WebSocketService } from '../../../core/websocket/services/websocket.service';
 import { TokenStorageService } from '../../../core/auth/services/token-storage.service';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import {
   MoveAttemptMessage,
   MoveExecutedMessage,
@@ -71,6 +71,12 @@ export class GameService {
     const state = this.gameState();
     if (!state) return null;
     return state.myColor === 'WHITE' ? state.whitePlayer : state.blackPlayer;
+  });
+
+  public winnerColor = computed(() => {
+    const state = this.gameState();
+    if (!state?.loserPlayerId) return null;
+    return state.whitePlayer.playerId === state.loserPlayerId ? 'BLACK' : 'WHITE';
   });
 
   constructor() {
@@ -161,7 +167,7 @@ export class GameService {
         this.stopClock();
         this.gameStateSignal.update(state => {
           if (!state) return state;
-          return { ...state, gameStatus: message.gameStatus };
+          return { ...state, gameStatus: message.gameStatus, loserPlayerId: message.loserPlayerId };
         });
       });
 
