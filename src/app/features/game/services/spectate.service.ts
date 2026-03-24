@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { WebSocketService } from '../../../core/websocket/services/websocket.service';
 import { TokenStorageService } from '../../../core/auth/services/token-storage.service';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import {
   GameStateSyncMessage,
   MoveExecutedMessage,

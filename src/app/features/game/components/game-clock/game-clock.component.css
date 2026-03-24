@@ -1,23 +1,30 @@
 .clock-container {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 12px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.08);
-  border: 2px solid transparent;
-  transition: color 0.3s ease, border-color 0.3s ease;
+  padding: 6px 14px;
+  border-radius: 5px;
+  background: var(--wood-dark, #2c1810);
+  border: 2px solid var(--wood-mid, #5c3a1e);
+  transition: border-color 0.3s ease, background 0.3s ease;
 }
 
 .clock-active {
-  border-color: var(--mat-primary-color, #3f51b5);
+  background: var(--wood-darkest, #1a0f06);
+  border-color: var(--gold, #c9a84c);
+  box-shadow: 0 0 8px rgba(201,168,76,0.3);
 }
 
 .clock-time {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+  color: var(--paper-light, #f5ead7);
+}
+
+.clock-active .clock-time {
+  color: var(--gold, #c9a84c);
 }
 
 .clock-warning .clock-time {

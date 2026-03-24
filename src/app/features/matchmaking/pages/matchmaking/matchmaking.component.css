@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: calc(100vh - 88px);
   padding: 20px;
 }
 
@@ -10,10 +10,11 @@
   max-width: 600px;
   width: 100%;
   min-height: 400px;
-  background-color: #fff8e7;
-  border-radius: 24px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  border: none;
+  background: rgba(44,24,16,0.92);
+  border: 1px solid var(--gold-dark, #8b6914);
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  overflow: hidden;
 }
 
 mat-card-header {
@@ -21,21 +22,25 @@ mat-card-header {
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
-  padding-top: 12px;
+  padding-top: 24px;
+  padding-bottom: 16px;
+  background: linear-gradient(to bottom, var(--wood-dark, #2c1810), transparent);
+  border-bottom: 1px solid var(--wood-mid, #5c3a1e);
 }
 
 mat-card-title {
-  font-size: 28px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 1px;
   margin-bottom: 8px;
-  color: rgba(0, 0, 0, 0.85);
+  color: var(--gold, #c9a84c);
 }
 
 mat-card-subtitle {
+  font-family: 'Crimson Text', Georgia, serif;
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--wood-light, #8b6343);
   font-weight: 500;
 }
 
@@ -58,10 +63,11 @@ mat-card-subtitle {
 }
 
 .large-icon {
-  font-size: 80px;
-  width: 80px;
-  height: 80px;
-  margin-bottom: 24px;
+  font-size: 72px;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 20px;
+  color: var(--gold, #c9a84c);
 }
 
 .large-icon.success {
@@ -73,59 +79,76 @@ mat-card-subtitle {
 }
 
 .info-text {
+  font-family: 'Crimson Text', Georgia, serif;
   font-size: 16px;
-  color: rgba(0, 0, 0, 0.7);
-  margin: 16px 0;
+  color: var(--paper-dark, #e8d5b0);
+  margin: 12px 0;
 }
 
 .queue-title,
 .success-title,
 .error-title {
+  font-family: 'Playfair Display', Georgia, serif;
   font-size: 22px;
-  font-weight: 500;
-  margin: 16px 0;
+  font-weight: 700;
+  margin: 12px 0;
+  color: var(--cream, #f5ead7);
 }
 
 .success-title {
-  color: #4caf50;
+  color: #81c784;
 }
 
 .error-title {
-  color: #f44336;
+  color: #ef9a9a;
 }
 
 .queue-position {
-  font-size: 18px;
-  color: rgba(0, 0, 0, 0.8);
-  margin: 12px 0;
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 17px;
+  color: var(--paper-dark, #e8d5b0);
+  margin: 10px 0;
 }
 
 .queue-position strong {
-  color: #3f51b5;
-  font-size: 24px;
+  color: var(--gold, #c9a84c);
+  font-size: 22px;
 }
 
 .error-text {
+  font-family: 'Crimson Text', Georgia, serif;
   font-size: 14px;
-  color: #f44336;
-  margin: 12px 0;
-  padding: 16px;
-  background-color: #ffebee;
+  color: #ef9a9a;
+  margin: 10px 0;
+  padding: 12px 16px;
+  background: rgba(198, 40, 40, 0.15);
+  border: 1px solid rgba(198,40,40,0.3);
   border-radius: 4px;
 }
 
 /* Buttons */
 .action-button,
 .cancel-button {
-  margin-top: 24px;
+  margin-top: 20px;
   min-width: 200px;
   height: 48px;
-  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  border-radius: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  background: linear-gradient(135deg, var(--wood-mid, #5c3a1e), var(--wood-dark, #2c1810));
+  color: var(--gold, #c9a84c);
+  border: 1px solid var(--gold-dark, #8b6914);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: linear-gradient(135deg, var(--wood-light, #8b6343), var(--wood-mid, #5c3a1e));
+    color: var(--gold-bright, #f0c040);
+    border-color: var(--gold, #c9a84c);
+  }
 }
 
 .action-button mat-icon {
@@ -134,11 +157,11 @@ mat-card-subtitle {
 
 /* Spinners */
 mat-spinner {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 mat-progress-bar {
-  margin-top: 24px;
+  margin-top: 20px;
   width: 100%;
 }
 
@@ -149,9 +172,9 @@ mat-progress-bar {
   }
 
   .large-icon {
-    font-size: 60px;
-    width: 60px;
-    height: 60px;
+    font-size: 56px;
+    width: 56px;
+    height: 56px;
   }
 
   .queue-title,

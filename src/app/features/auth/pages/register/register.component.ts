@@ -81,9 +81,16 @@ export class RegisterComponent {
 
     this.authService.register(registerRequest).subscribe({
       next: () => {
-        this.isLoading.set(false);
-        this.snackBar.open('Inscription réussie ! Vous pouvez maintenant vous connecter.', 'Fermer', { duration: 5000 });
-        this.router.navigate(['/auth/login']);
+        this.authService.login({ username: registerRequest.username, password: registerRequest.password }).subscribe({
+          next: () => {
+            this.isLoading.set(false);
+            this.router.navigate(['/dashboard']);
+          },
+          error: () => {
+            this.isLoading.set(false);
+            this.router.navigate(['/auth/login']);
+          }
+        });
       },
       error: (error) => {
         this.isLoading.set(false);

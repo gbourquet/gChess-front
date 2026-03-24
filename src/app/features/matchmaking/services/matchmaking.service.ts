@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, filter, tap, takeUntil, Subject } from 'rxjs';
 import { WebSocketService } from '../../../core/websocket/services/websocket.service';
 import { TokenStorageService } from '../../../core/auth/services/token-storage.service';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import {
   MatchFoundMessage,
   QueuePositionUpdateMessage,

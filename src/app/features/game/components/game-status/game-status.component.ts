@@ -21,6 +21,7 @@ export class GameStatusComponent {
   gameStatus = input.required<GameStatus>();
   isMyTurn = input<boolean>(false);
   isCheck = input<boolean>(false);
+  winnerColor = input<Color | null>(null);
 
   /**
    * Get turn label
@@ -52,8 +53,13 @@ export class GameStatusComponent {
         return 'Match nul';
       case 'RESIGNED':
         return 'Abandon';
-      case 'TIMEOUT':
+      case 'TIMEOUT': {
+        const winner = this.winnerColor();
+        if (winner) {
+          return `Temps écoulé ! ${winner === 'WHITE' ? 'Blancs' : 'Noirs'} gagnent`;
+        }
         return 'Temps écoulé';
+      }
       default:
         return 'En cours';
     }

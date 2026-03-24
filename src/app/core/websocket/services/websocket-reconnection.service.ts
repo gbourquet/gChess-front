@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, timer, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 
 /**
  * WebSocket reconnection service with exponential backoff

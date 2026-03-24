@@ -1,5 +1,15 @@
 <div class="chess-board-wrapper">
-  <div class="board-with-coordinates">
+  <!-- Board frame controls -->
+  <div class="board-frame-controls">
+    <button class="frame-btn" (click)="toggleCoords()" [title]="showCoords() ? 'Masquer les coordonnées' : 'Afficher les coordonnées'">
+      <span>&#128065;</span>
+    </button>
+    <button class="frame-btn" (click)="onFlipRequest()" title="Retourner le plateau">
+      <span>&#8635;</span>
+    </button>
+  </div>
+
+  <div class="board-with-coordinates" [class.hide-coords]="!showCoords()">
     <!-- Top file labels (a-h) -->
     <div class="coordinates-top">
       <div class="corner-spacer"></div>

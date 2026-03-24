@@ -1,1 +1,44 @@
-<router-outlet />
+@if (authService.isAuthenticated()) {
+  <nav class="top-nav">
+    <a class="nav-logo" routerLink="/dashboard">&#9819; The Grandmaster's Club</a>
+    <div class="nav-links">
+      <a routerLink="/lobby" routerLinkActive="active">JOUER</a>
+      <a routerLink="/history" routerLinkActive="active">HISTORIQUE</a>
+    </div>
+    <div class="nav-profile">
+      <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-btn">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ authService.currentUser()?.username }}</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #profileMenu="matMenu" class="profile-menu">
+        <button mat-menu-item (click)="authService.logout()">
+          <mat-icon>logout</mat-icon>
+          Déconnexion
+        </button>
+      </mat-menu>
+    </div>
+  </nav>
+}
+
+<main class="app-main" [class.authenticated]="authService.isAuthenticated()">
+  <router-outlet />
+</main>
+
+@if (authService.isAuthenticated()) {
+  <footer class="bottom-bar">
+    <div class="bottom-controls">
+      <button class="bar-btn" title="Son"><mat-icon>volume_up</mat-icon></button>
+      <span class="bar-separator">|</span>
+      <span class="bar-label">Pièces :</span>
+      <button class="bar-btn active-theme" title="Staunton">Staunton</button>
+      <button class="bar-btn" title="Abstrait">Abstrait</button>
+      <span class="bar-separator">|</span>
+      <span class="bar-label">Plateau :</span>
+      <button class="bar-btn active-theme" title="Bois">Bois</button>
+      <button class="bar-btn" title="Marbre">Marbre</button>
+      <span class="bar-separator">|</span>
+      <button class="bar-btn" title="Mode daltonien"><mat-icon>accessibility</mat-icon></button>
+    </div>
+  </footer>
+}

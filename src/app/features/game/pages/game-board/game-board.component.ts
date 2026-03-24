@@ -52,10 +52,23 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   myPlayer = this.gameService.myPlayer;
   whiteTimeMs = this.gameService.whiteTimeMs;
   blackTimeMs = this.gameService.blackTimeMs;
+  winnerColor = this.gameService.winnerColor;
 
   // Local state
   private pendingMove = signal<{ from: string; to: string } | null>(null);
   boardSize = signal<number>(480);
+  boardFlipped = signal(false);
+
+  // Computed: board orientation (my side by default, can be flipped)
+  boardOrientation = computed((): 'white' | 'black' => {
+    const base = this.myOrientation();
+    const flipped = this.boardFlipped();
+    return (base === 'white') !== flipped ? 'white' : 'black';
+  });
+
+  flipBoard(): void {
+    this.boardFlipped.update(v => !v);
+  }
 
   // Move history navigation
   currentMoveIndex = signal<number | null>(null); // null = at latest move
