@@ -188,17 +188,20 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
         const isLastMoveTo = lastMove?.to === squareNotation;
         const isPartOfLastMove = isLastMoveFrom || isLastMoveTo;
 
+        // Remove animation classes before re-adding
+        square.classList.remove('last-move-square', 'check-square');
+
         // Set background color with priority: selected > last move > normal
         if (isSelected) {
-          square.style.backgroundColor = '#baca44'; // Yellow-green highlight for selection
-          square.style.boxShadow = 'inset 0 0 0 2px #646f40';
+          square.style.backgroundColor = isLight ? '#4a1a5a' : '#2d0a3a';
+          square.style.boxShadow = 'inset 0 0 0 2px #e040fb, 0 0 8px rgba(224,64,251,0.5)';
         } else if (isPartOfLastMove) {
-          // Different colors for light and dark squares in last move
-          square.style.backgroundColor = isLight ? '#e8d4a0' : '#9b7653';
-          square.style.boxShadow = 'inset 0 0 0 2px #7a5c3e';
+          square.classList.add('last-move-square');
+          square.style.backgroundColor = isLight ? '#1a3a3a' : '#0d2020';
+          square.style.boxShadow = '';
         } else {
-          // Beige and brown colors like in the image
-          square.style.backgroundColor = isLight ? '#f0d9b5' : '#b58863';
+          square.style.backgroundColor = isLight ? '#254525' : '#0d160d';
+          square.style.boxShadow = '';
         }
 
         square.style.display = 'flex';
@@ -209,14 +212,15 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
         square.style.userSelect = 'none';
         square.style.transition = 'background-color 0.2s ease, box-shadow 0.2s ease';
 
-        // Check king-in-check highlight
+        // Check king-in-check highlight: use class for CSS animation
         const inCheck = this.isCheck();
         if (inCheck) {
           const kingChar = this.currentSide() === 'white' ? 'K' : 'k';
           const pieceHere = position[boardRow]?.[boardCol];
           if (pieceHere === kingChar) {
-            square.style.backgroundColor = 'rgba(220, 50, 50, 0.75)';
-            square.style.boxShadow = 'inset 0 0 12px 4px rgba(255,0,0,0.6)';
+            square.classList.add('check-square');
+            square.style.backgroundColor = '';
+            square.style.boxShadow = '';
           }
         }
 
@@ -236,8 +240,8 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
           halo.style.alignItems = 'center';
           halo.style.justifyContent = 'center';
           halo.style.background = isWhitePiece
-            ? 'radial-gradient(circle, rgba(0,0,0,0.28) 28%, transparent 65%)'
-            : 'radial-gradient(circle, rgba(255,245,220,0.32) 28%, transparent 65%)';
+            ? 'radial-gradient(circle, rgba(0,229,255,0.12) 28%, transparent 65%)'
+            : 'radial-gradient(circle, rgba(224,64,251,0.12) 28%, transparent 65%)';
 
           const pieceElement = document.createElement('span');
           pieceElement.textContent = this.getPieceUnicode(piece);
@@ -247,10 +251,10 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
 
           if (isWhitePiece) {
             pieceElement.style.color = '#ffffff';
-            pieceElement.style.filter = 'drop-shadow(0 1px 1px rgba(0,0,0,0.95))';
+            pieceElement.style.filter = 'drop-shadow(0 0 4px rgba(0,229,255,0.7)) drop-shadow(0 1px 1px rgba(0,0,0,0.9))';
           } else {
-            pieceElement.style.color = '#160800';
-            pieceElement.style.filter = 'drop-shadow(0 1px 1px rgba(245,237,224,0.9))';
+            pieceElement.style.color = '#cccccc';
+            pieceElement.style.filter = 'drop-shadow(0 0 4px rgba(224,64,251,0.7)) drop-shadow(0 1px 1px rgba(0,0,0,0.9))';
           }
 
           halo.appendChild(pieceElement);

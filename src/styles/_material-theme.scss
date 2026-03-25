@@ -4,12 +4,12 @@
 @include mat.core();
 
 // Define the primary, accent, and warn palettes
-$primary-palette: mat.m2-define-palette(mat.$m2-brown-palette, 700);
-$accent-palette: mat.m2-define-palette(mat.$m2-amber-palette, 400);
+$primary-palette: mat.m2-define-palette(mat.$m2-deep-purple-palette);
+$accent-palette: mat.m2-define-palette(mat.$m2-cyan-palette, 400);
 $warn-palette: mat.m2-define-palette(mat.$m2-red-palette);
 
-// Create the theme
-$gchess-theme: mat.m2-define-light-theme((
+// Create the theme (dark)
+$gchess-theme: mat.m2-define-dark-theme((
   color: (
     primary: $primary-palette,
     accent: $accent-palette,

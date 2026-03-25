@@ -1,10 +1,8 @@
 .game-status-card {
-  background: var(--paper-light, #f5ead7);
-  border: 1px solid var(--paper-dark, #e8d5b0);
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-family: 'Crimson Text', Georgia, serif;
-  color: var(--ink, #1a0f06);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
 }
 
 .status-container {
@@ -13,6 +11,7 @@
   gap: 10px;
   align-items: center;
   justify-content: center;
+  padding: 4px 0;
   flex-wrap: wrap;
 }
 
@@ -20,12 +19,16 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'Crimson Text', Georgia, serif;
-  padding: 4px 10px;
-  border-radius: 4px;
-  background-color: rgba(92,58,30,0.08);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  background: rgba(0, 229, 255, 0.05);
+  border: 1px solid var(--arena-border-bright, #3a3a5a);
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  color: var(--text-primary, #e8e8f0);
 }
 
 .turn-indicator mat-icon {
@@ -35,16 +38,16 @@
 }
 
 .turn-indicator mat-icon.white-turn {
-  color: #8b6914;
+  color: var(--cyan, #00e5ff);
 }
 
 .turn-indicator mat-icon.black-turn {
-  color: var(--wood-dark, #2c1810);
+  color: var(--magenta, #e040fb);
 }
 
 .turn-text {
-  color: var(--ink, #1a0f06);
-  font-weight: 600;
+  color: var(--text-primary, #e8e8f0);
+  font-weight: 700;
 }
 
 mat-chip-set {
@@ -52,35 +55,33 @@ mat-chip-set {
 }
 
 mat-chip {
-  font-size: 12px;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
-  padding: 4px 12px;
-  min-width: 160px;
+  font-family: 'Rajdhani', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+  min-width: 180px;
   text-align: center;
-  display: inline-flex;
-  justify-content: center;
-  border-radius: 4px;
 }
 
 .game-over-message {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: linear-gradient(135deg, #5c1a1a 0%, #8b2222 100%);
-  border-radius: 5px;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(255, 23, 68, 0.15);
+  border: 1px solid var(--neon-red, #ff1744);
+  color: var(--neon-red, #ff1744);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
   font-weight: 700;
-  color: var(--gold, #c9a84c);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 12px;
-  font-family: 'Inter', sans-serif;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  letter-spacing: 2px;
+  box-shadow: 0 0 15px rgba(255, 23, 68, 0.3);
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
 }
 
 .game-over-message mat-icon {
-  color: var(--gold, #c9a84c);
+  color: var(--neon-red, #ff1744);
   font-size: 16px;
   width: 16px;
   height: 16px;
@@ -94,7 +95,7 @@ mat-chip {
   }
 
   .turn-indicator {
-    font-size: 13px;
+    font-size: 11px;
     padding: 3px 8px;
   }
 }
