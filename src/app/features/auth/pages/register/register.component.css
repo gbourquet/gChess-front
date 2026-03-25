@@ -9,11 +9,12 @@
   max-width: 420px;
   width: 100%;
   margin: 20px;
-  background: rgba(44,24,16,0.95);
-  border: 1px solid var(--gold-dark, #8b6914);
-  border-radius: 8px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  background: var(--arena-panel, #16161e);
+  border: 1px solid var(--cyan-dim, #0097a7);
+  border-radius: 0;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 229, 255, 0.1);
   overflow: hidden;
+  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
 }
 
 mat-card-header {
@@ -23,24 +24,28 @@ mat-card-header {
   margin-bottom: 20px;
   padding-top: 28px;
   padding-bottom: 16px;
-  background: linear-gradient(to bottom, var(--wood-dark, #2c1810), transparent);
-  border-bottom: 1px solid var(--wood-mid, #5c3a1e);
+  background: rgba(0, 229, 255, 0.03);
+  border-bottom: 1px solid var(--arena-border-bright, #3a3a5a);
 }
 
 mat-card-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 28px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 24px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 3px;
   margin-bottom: 8px;
-  color: var(--gold, #c9a84c);
+  color: var(--cyan, #00e5ff);
+  text-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+  text-transform: uppercase;
 }
 
 mat-card-subtitle {
-  font-family: 'Crimson Text', Georgia, serif;
-  font-size: 14px;
-  color: var(--wood-light, #8b6343);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  color: var(--text-secondary, #6868a0);
   font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .full-width {
@@ -54,21 +59,23 @@ mat-form-field {
 .submit-button {
   margin-top: 8px;
   height: 48px;
-  border-radius: 5px;
-  font-family: 'Inter', sans-serif;
+  border-radius: 0;
+  font-family: 'Rajdhani', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 13px;
-  background: linear-gradient(135deg, var(--wood-mid, #5c3a1e), var(--wood-dark, #2c1810));
-  color: var(--gold, #c9a84c);
-  border: 1px solid var(--gold-dark, #8b6914);
+  letter-spacing: 2px;
+  font-size: 14px;
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--cyan, #00e5ff);
+  border: 1px solid var(--cyan-dim, #0097a7);
   transition: all 0.2s;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
 
   &:hover:not([disabled]) {
-    background: linear-gradient(135deg, var(--wood-light, #8b6343), var(--wood-mid, #5c3a1e));
-    color: var(--gold-bright, #f0c040);
-    border-color: var(--gold, #c9a84c);
+    background: rgba(0, 229, 255, 0.16);
+    border-color: var(--cyan, #00e5ff);
+    box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
+    text-shadow: 0 0 8px var(--cyan, #00e5ff);
   }
 }
 
@@ -85,18 +92,23 @@ mat-form-field {
 
 .login-link p {
   margin: 0;
-  color: var(--wood-light, #8b6343);
-  font-family: 'Crimson Text', Georgia, serif;
-  font-size: 14px;
+  color: var(--text-secondary, #6868a0);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 .login-link a {
-  color: var(--gold, #c9a84c);
+  color: var(--cyan, #00e5ff);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 
   &:hover {
-    color: var(--gold-bright, #f0c040);
+    color: #ffffff;
+    text-shadow: 0 0 8px var(--cyan, #00e5ff);
     text-decoration: underline;
   }
 }

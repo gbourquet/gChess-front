@@ -4,21 +4,27 @@
 // Import Material theme configuration
 @use './styles/material-theme';
 
-// CSS Custom Properties - Grandmaster's Club palette
+// CSS Custom Properties - Checkmate Arena palette
 :root {
-  --wood-darkest: #1a0f06;
-  --wood-dark: #2c1810;
-  --wood-mid: #5c3a1e;
-  --wood-light: #8b6343;
-  --wood-frame: #4a2810;
-  --paper-light: #f5ead7;
-  --paper-bg: #fdf6e3;
-  --paper-dark: #e8d5b0;
-  --gold: #c9a84c;
-  --gold-bright: #f0c040;
-  --gold-dark: #8b6914;
-  --cream: #f5ead7;
-  --ink: #1a0f06;
+  --arena-bg: #0a0a0f;
+  --arena-surface: #111118;
+  --arena-panel: #16161e;
+  --arena-border: #252535;
+  --arena-border-bright: #3a3a5a;
+  --cyan: #00e5ff;
+  --cyan-dim: #0097a7;
+  --cyan-glow: rgba(0, 229, 255, 0.25);
+  --magenta: #e040fb;
+  --magenta-dim: #7b1fa2;
+  --magenta-glow: rgba(224, 64, 251, 0.25);
+  --yellow: #ffd740;
+  --neon-green: #00e676;
+  --neon-red: #ff1744;
+  --text-primary: #e8e8f0;
+  --text-secondary: #6868a0;
+  --text-cyan: #00e5ff;
+  --board-light: #254525;
+  --board-dark: #0d160d;
 }
 
 // Global styles
@@ -29,12 +35,13 @@ html, body {
 }
 
 body {
-  font-family: 'Crimson Text', Georgia, serif;
-  background-color: var(--wood-darkest);
-  background-image: radial-gradient(ellipse at 30% 20%, rgba(92,58,30,0.3) 0%, transparent 60%),
-                    radial-gradient(ellipse at 70% 80%, rgba(44,24,16,0.4) 0%, transparent 50%);
-  background-attachment: fixed;
-  color: var(--cream);
+  font-family: 'Rajdhani', sans-serif;
+  background-color: var(--arena-bg);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 50%),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 50%);
+  background-size: 8px 8px;
+  color: var(--text-primary);
 }
 
 // Global utilities
@@ -58,21 +65,21 @@ body {
 .p-2 { padding: vars.$spacing-md; }
 .p-3 { padding: vars.$spacing-lg; }
 
-// Scrollbar styling - wood tones
+// Scrollbar styling - arena tones
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--wood-dark);
+  background: var(--arena-surface);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--wood-mid);
+  background: var(--arena-border-bright);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--wood-light);
+  background: var(--cyan-dim);
 }

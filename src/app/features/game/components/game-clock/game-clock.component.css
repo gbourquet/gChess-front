@@ -1,45 +1,42 @@
 .clock-container {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 6px 14px;
-  border-radius: 5px;
-  background: var(--wood-dark, #2c1810);
-  border: 2px solid var(--wood-mid, #5c3a1e);
-  transition: border-color 0.3s ease, background 0.3s ease;
-}
-
-.clock-active {
-  background: var(--wood-darkest, #1a0f06);
-  border-color: var(--gold, #c9a84c);
-  box-shadow: 0 0 8px rgba(201,168,76,0.3);
+  background: #0a0a10;
+  border: 1px solid var(--arena-border-bright, #3a3a5a);
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  transition: border-color 0.3s ease;
 }
 
 .clock-time {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--paper-light, #f5ead7);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary, #6868a0);
 }
 
 .clock-active .clock-time {
-  color: var(--gold, #c9a84c);
+  color: var(--cyan, #00e5ff);
+  text-shadow: 0 0 8px var(--cyan, #00e5ff), 0 0 20px rgba(0, 229, 255, 0.4);
 }
 
 .clock-warning .clock-time {
-  color: #FF8C00;
+  color: var(--yellow, #ffd740);
+  text-shadow: 0 0 8px var(--yellow, #ffd740);
 }
 
 .clock-critical .clock-time {
-  color: #D32F2F;
+  color: var(--neon-red, #ff1744) !important;
+  text-shadow: 0 0 8px var(--neon-red, #ff1744);
 }
 
 .clock-pulsing {
-  animation: pulse 1s ease-in-out infinite;
+  animation: clock-pulse 0.8s ease-in-out infinite;
 }
 
-@keyframes pulse {
+@keyframes clock-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
 }
