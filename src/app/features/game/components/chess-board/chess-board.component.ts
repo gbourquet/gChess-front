@@ -9,6 +9,7 @@ import {
   ElementRef,
   viewChild
 } from '@angular/core';
+import { Chess } from 'chess.js';
 
 /**
  * Move event data
@@ -42,6 +43,7 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
   position = input<string>('start'); // FEN string or 'start'
   orientation = input<'white' | 'black'>('white');
   draggable = input<boolean>(true);
+  premoveAllowed = input<boolean>(false);
   size = input<number>(600);
   lastMove = input<LastMove | null>(null); // Highlight last move
   isCheck = input<boolean>(false);
@@ -59,16 +61,37 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
 
   private board: any = null;
   private draggedPiece: { square: string; piece: string } | null = null;
-
   private boardInitialized = false;
 
+  // Regular move selection state (our turn)
+  private selectedSquare: string | null = null;
+  private legalMoveTargets: Set<string> = new Set();
+
+  // Premove state (opponent's turn)
+  private premoveSelectingFrom: string | null = null;  // piece being aimed for premove
+  private premoveTargets: Set<string> = new Set();     // candidate destinations shown
+  private premoveFrom: string | null = null;           // confirmed premove origin
+  private premoveTo: string | null = null;             // confirmed premove destination
+
   constructor() {
-    // React to position changes
+    // React to position changes — also fires premove when it becomes our turn
     effect(() => {
       const pos = this.position();
+      const canMove = this.draggable();
       if (this.boardInitialized) {
-        console.log('[ChessBoard] Position changed to:', pos);
-        this.renderBoard();
+        if (this.premoveFrom && this.premoveTo && canMove) {
+          // It's now our turn: execute the queued premove
+          const from = this.premoveFrom;
+          const to = this.premoveTo;
+          this.clearPremove();
+          this.renderBoard();
+          this.moveChange.emit({ from, to });
+        } else {
+          // New position while opponent is playing: keep premove but clear selection
+          this.selectedSquare = null;
+          this.legalMoveTargets = new Set();
+          this.renderBoard();
+        }
       }
     });
 
@@ -76,7 +99,6 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     effect(() => {
       const orient = this.orientation();
       if (this.boardInitialized) {
-        console.log('[ChessBoard] Orientation changed to:', orient);
         this.renderBoard();
       }
     });
@@ -85,7 +107,6 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     effect(() => {
       const move = this.lastMove();
       if (this.boardInitialized) {
-        console.log('[ChessBoard] Last move changed to:', move);
         this.renderBoard();
       }
     });
@@ -107,17 +128,11 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     this.flipRequest.emit();
   }
 
-  /**
-   * Get file labels (a-h) based on orientation
-   */
   files(): string[] {
     const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     return this.orientation() === 'white' ? files : [...files].reverse();
   }
 
-  /**
-   * Get rank labels (8-1) based on orientation
-   */
   ranks(): number[] {
     const ranks = [8, 7, 6, 5, 4, 3, 2, 1];
     return this.orientation() === 'white' ? ranks : [...ranks].reverse();
@@ -127,19 +142,70 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     this.initializeBoard();
   }
 
-  ngOnDestroy(): void {
-    // Cleanup if needed
-  }
+  ngOnDestroy(): void {}
 
   private initializeBoard(): void {
-    console.log('[ChessBoard] Initializing board');
     this.boardInitialized = true;
     this.renderBoard();
   }
 
   private updatePosition(fen: string): void {
-    console.log('[ChessBoard] Updating position:', fen);
     this.renderBoard();
+  }
+
+  /**
+   * Compute legal move targets for the given square using chess.js
+   */
+  private computeLegalMoves(square: string): Set<string> {
+    const targets = new Set<string>();
+    try {
+      let fen = this.position();
+      if (!fen || fen === 'start' || fen === '') {
+        fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+      }
+      const chess = new Chess(fen);
+      const moves = chess.moves({ square: square as any, verbose: true });
+      for (const m of moves) {
+        targets.add(m.to);
+      }
+    } catch (e) {
+      // Ignore parse errors
+    }
+    return targets;
+  }
+
+  /**
+   * Compute premove candidate destinations: all squares the piece could
+   * legally reach from the current board, ignoring whose turn it actually is.
+   * Uses only the piece placement + our color — strips castling/en passant to
+   * avoid creating an invalid position for chess.js.
+   */
+  private computePremoveTargets(square: string): Set<string> {
+    const targets = new Set<string>();
+    try {
+      let fen = this.position();
+      if (!fen || fen === 'start' || fen === '') {
+        fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+      }
+      // Keep only the board part and set the active side to ours
+      const boardPart = fen.split(' ')[0];
+      const ourColor = this.orientation() === 'white' ? 'w' : 'b';
+      const chess = new Chess(`${boardPart} ${ourColor} - - 0 1`);
+      const moves = chess.moves({ square: square as any, verbose: true });
+      for (const m of moves) {
+        targets.add(m.to);
+      }
+    } catch (e) {
+      console.error('[ChessBoard] computePremoveTargets error:', e);
+    }
+    return targets;
+  }
+
+  private clearPremove(): void {
+    this.premoveSelectingFrom = null;
+    this.premoveTargets = new Set();
+    this.premoveFrom = null;
+    this.premoveTo = null;
   }
 
   private renderBoard(): void {
@@ -148,12 +214,8 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     const orient = this.orientation();
     const fen = this.position();
 
-    console.log('[ChessBoard] Rendering board with FEN:', fen);
-
-    // Clear previous content
     container.innerHTML = '';
 
-    // Create board representation
     container.style.width = `${size}px`;
     container.style.height = `${size}px`;
     container.style.display = 'grid';
@@ -161,40 +223,44 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     container.style.gridTemplateRows = 'repeat(8, 1fr)';
     container.style.border = '2px solid #333';
 
-    // Parse FEN position
     const position = this.parseFEN(fen);
 
-    // Create squares
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const square = document.createElement('div');
         const isLight = (row + col) % 2 === 0;
 
-        // Calculate board position based on orientation
         const boardRow = orient === 'white' ? row : 7 - row;
         const boardCol = orient === 'white' ? col : 7 - col;
 
-        // Add square notation
-        const file = String.fromCharCode(97 + boardCol); // a-h
+        const file = String.fromCharCode(97 + boardCol);
         const rank = 8 - boardRow;
         const squareNotation = `${file}${rank}`;
 
-        // Check if this square is selected
         const isSelected = this.selectedSquare === squareNotation;
+        const isLegalTarget = this.legalMoveTargets.has(squareNotation);
 
-        // Check if this square is part of the last move
+        const isPremoveFrom = this.premoveFrom === squareNotation;
+        const isPremoveTo = this.premoveTo === squareNotation;
+        const isPremoveSelecting = this.premoveSelectingFrom === squareNotation;
+        const isPremoveTarget = this.premoveTargets.has(squareNotation);
+
         const lastMove = this.lastMove();
-        const isLastMoveFrom = lastMove?.from === squareNotation;
-        const isLastMoveTo = lastMove?.to === squareNotation;
-        const isPartOfLastMove = isLastMoveFrom || isLastMoveTo;
+        const isPartOfLastMove =
+          lastMove?.from === squareNotation || lastMove?.to === squareNotation;
 
-        // Remove animation classes before re-adding
+        const hasPiece = position[boardRow]?.[boardCol] != null;
+
         square.classList.remove('last-move-square', 'check-square');
 
-        // Set background color with priority: selected > last move > normal
+        // Background priority: selected > premove > lastMove > normal
         if (isSelected) {
           square.style.backgroundColor = isLight ? '#4a1a5a' : '#2d0a3a';
           square.style.boxShadow = 'inset 0 0 0 2px #e040fb, 0 0 8px rgba(224,64,251,0.5)';
+        } else if (isPremoveFrom || isPremoveTo || isPremoveSelecting) {
+          // Orange/amber for confirmed premove squares and selecting square
+          square.style.backgroundColor = isLight ? '#3d2800' : '#261900';
+          square.style.boxShadow = 'inset 0 0 0 2px #ff9800, 0 0 8px rgba(255,152,0,0.4)';
         } else if (isPartOfLastMove) {
           square.classList.add('last-move-square');
           square.style.backgroundColor = isLight ? '#1a3a3a' : '#0d2020';
@@ -208,11 +274,12 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
         square.style.alignItems = 'center';
         square.style.justifyContent = 'center';
         square.style.fontSize = '48px';
-        square.style.cursor = this.draggable() ? 'pointer' : 'default';
+        square.style.cursor = (this.draggable() || this.premoveAllowed()) ? 'pointer' : 'default';
         square.style.userSelect = 'none';
+        square.style.position = 'relative';
         square.style.transition = 'background-color 0.2s ease, box-shadow 0.2s ease';
 
-        // Check king-in-check highlight: use class for CSS animation
+        // Check highlight
         const inCheck = this.isCheck();
         if (inCheck) {
           const kingChar = this.currentSide() === 'white' ? 'K' : 'k';
@@ -227,12 +294,11 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
         square.title = squareNotation;
         square.dataset['square'] = squareNotation;
 
-        // Add piece if present
+        // Piece rendering
         const piece = position[boardRow]?.[boardCol];
         if (piece) {
           const isWhitePiece = piece === piece.toUpperCase();
 
-          // Halo wrapper
           const halo = document.createElement('div');
           halo.style.width = '100%';
           halo.style.height = '100%';
@@ -251,19 +317,33 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
 
           if (isWhitePiece) {
             pieceElement.style.color = '#ffffff';
-            pieceElement.style.filter = 'drop-shadow(0 0 4px rgba(0,229,255,0.7)) drop-shadow(0 1px 1px rgba(0,0,0,0.9))';
+            pieceElement.style.filter =
+              'drop-shadow(0 0 4px rgba(0,229,255,0.7)) drop-shadow(0 1px 1px rgba(0,0,0,0.9))';
           } else {
             pieceElement.style.color = '#cccccc';
-            pieceElement.style.filter = 'drop-shadow(0 0 4px rgba(224,64,251,0.7)) drop-shadow(0 1px 1px rgba(0,0,0,0.9))';
+            pieceElement.style.filter =
+              'drop-shadow(0 0 4px rgba(224,64,251,0.7)) drop-shadow(0 1px 1px rgba(0,0,0,0.9))';
           }
 
           halo.appendChild(pieceElement);
           square.appendChild(halo);
         }
 
-        // Add click handler for moves
+        // Legal move hint (our turn) — cyan
+        if (isLegalTarget) {
+          square.appendChild(this.makeMoveHint(hasPiece, 'rgba(0,229,255,0.45)', 'rgba(0,229,255,0.7)', '0 0 6px rgba(0,229,255,0.4)'));
+        }
+
+        // Premove hint — same cyan as regular move hints
+        if (isPremoveTarget) {
+          square.appendChild(this.makeMoveHint(hasPiece, 'rgba(0,229,255,0.45)', 'rgba(0,229,255,0.7)', '0 0 6px rgba(0,229,255,0.4)'));
+        }
+
+        // Click handlers
         if (this.draggable()) {
           square.addEventListener('click', () => this.handleSquareClick(squareNotation));
+        } else if (this.premoveAllowed()) {
+          square.addEventListener('click', () => this.handlePremoveClick(squareNotation));
         }
 
         container.appendChild(square);
@@ -271,17 +351,34 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  /** Build a dot (empty square) or ring (capture) hint overlay */
+  private makeMoveHint(hasPiece: boolean, dotColor: string, ringColor: string, dotShadow: string): HTMLElement {
+    const hint = document.createElement('div');
+    hint.style.position = 'absolute';
+    hint.style.pointerEvents = 'none';
+    hint.style.zIndex = '2';
+    if (hasPiece) {
+      hint.style.width = '100%';
+      hint.style.height = '100%';
+      hint.style.boxShadow = `inset 0 0 0 4px ${ringColor}`;
+    } else {
+      hint.style.width = '33%';
+      hint.style.height = '33%';
+      hint.style.borderRadius = '50%';
+      hint.style.background = dotColor;
+      hint.style.boxShadow = dotShadow;
+    }
+    return hint;
+  }
+
   private parseFEN(fen: string | undefined): (string | null)[][] {
-    // Initialize 8x8 board
     const board: (string | null)[][] = Array(8).fill(null).map(() => Array(8).fill(null));
 
-    // Handle undefined, null, or empty FEN
     if (!fen || fen === 'start' || fen === '') {
       fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     }
 
     try {
-      // Parse FEN (only board position part)
       const parts = fen.split(' ');
       const rows = parts[0]?.split('/') || [];
 
@@ -298,14 +395,12 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
       }
     } catch (error) {
       console.error('[ChessBoard] Error parsing FEN:', fen, error);
-      // Return default starting position on error
     }
 
     return board;
   }
 
   private getPieceUnicode(piece: string): string {
-    // Use filled (solid) glyphs for both colors — white pieces are colored white via CSS
     const pieces: { [key: string]: string } = {
       'K': '♚', 'Q': '♛', 'R': '♜', 'B': '♝', 'N': '♞', 'P': '♟',
       'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
@@ -313,68 +408,101 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     return pieces[piece] || '';
   }
 
-  private selectedSquare: string | null = null;
-
+  /** Handle click during our turn (regular move) */
   private handleSquareClick(square: string): void {
     if (!this.draggable()) return;
 
     if (!this.selectedSquare) {
-      // First click - select piece (only if it's our piece)
       if (this.isOurPieceAt(square)) {
         this.selectedSquare = square;
-        console.log('Selected:', square);
-        this.renderBoard(); // Re-render to show highlight
+        this.legalMoveTargets = this.computeLegalMoves(square);
+        this.renderBoard();
       }
     } else {
-      // Second click
       if (this.selectedSquare === square) {
-        // Click on same square - deselect
-        console.log('Deselected:', square);
+        // Deselect
         this.selectedSquare = null;
-        this.renderBoard(); // Re-render to remove highlight
-      } else if (this.isOurPieceAt(square)) {
-        // Click on another of our pieces - change selection
-        console.log('Changed selection to:', square);
+        this.legalMoveTargets = new Set();
+        this.renderBoard();
+      } else if (this.isOurPieceAt(square) && !this.legalMoveTargets.has(square)) {
+        // Switch to another piece
         this.selectedSquare = square;
-        this.renderBoard(); // Re-render with new highlight
-      } else {
-        // Click on empty square or opponent piece - make move
-        this.moveChange.emit({
-          from: this.selectedSquare,
-          to: square
-        });
-        console.log('Move:', this.selectedSquare, '→', square);
+        this.legalMoveTargets = this.computeLegalMoves(square);
+        this.renderBoard();
+      } else if (this.legalMoveTargets.has(square)) {
+        // Emit move
+        this.moveChange.emit({ from: this.selectedSquare, to: square });
         this.selectedSquare = null;
-        // Board will be re-rendered by position update
+        this.legalMoveTargets = new Set();
+      } else {
+        // Click elsewhere — deselect
+        this.selectedSquare = null;
+        this.legalMoveTargets = new Set();
+        this.renderBoard();
       }
     }
   }
 
-  /**
-   * Check if there's a piece at the given square
-   */
-  private hasPieceAt(square: string): boolean {
-    const fen = this.position();
-    const position = this.parseFEN(fen);
+  /** Handle click during opponent's turn (premove) */
+  private handlePremoveClick(square: string): void {
+    if (!this.premoveAllowed()) return;
 
-    const file = square.charCodeAt(0) - 97; // a=0, b=1, ..., h=7
-    const rank = 8 - parseInt(square.charAt(1)); // 8=0, 7=1, ..., 1=7
+    // If clicking on a confirmed premove square, cancel the premove
+    if (this.premoveFrom && square === this.premoveFrom) {
+      this.clearPremove();
+      this.renderBoard();
+      return;
+    }
 
-    return position[rank]?.[file] != null;
+    // If a premove is already confirmed, a click on any of our pieces resets it
+    if (this.premoveFrom && this.isOurPieceAt(square)) {
+      this.clearPremove();
+      this.premoveSelectingFrom = square;
+      this.premoveTargets = this.computePremoveTargets(square);
+      this.renderBoard();
+      return;
+    }
+
+    if (!this.premoveSelectingFrom) {
+      // Start premove selection
+      if (this.isOurPieceAt(square)) {
+        this.premoveSelectingFrom = square;
+        this.premoveTargets = this.computePremoveTargets(square);
+        this.renderBoard();
+      }
+    } else {
+      if (this.premoveSelectingFrom === square) {
+        // Deselect
+        this.premoveSelectingFrom = null;
+        this.premoveTargets = new Set();
+        this.renderBoard();
+      } else if (this.isOurPieceAt(square)) {
+        // Switch selection to another of our pieces
+        this.premoveSelectingFrom = square;
+        this.premoveTargets = this.computePremoveTargets(square);
+        this.renderBoard();
+      } else if (this.premoveTargets.has(square)) {
+        // Confirm premove
+        this.premoveFrom = this.premoveSelectingFrom;
+        this.premoveTo = square;
+        this.premoveSelectingFrom = null;
+        this.premoveTargets = new Set();
+        this.renderBoard();
+      } else {
+        // Click elsewhere — cancel
+        this.premoveSelectingFrom = null;
+        this.premoveTargets = new Set();
+        this.renderBoard();
+      }
+    }
   }
 
-  /**
-   * Check if there's one of our pieces at the given square
-   * Uses orientation to determine our color:
-   * - orientation 'white' -> our pieces are uppercase (PRNBQK)
-   * - orientation 'black' -> our pieces are lowercase (prnbqk)
-   */
   private isOurPieceAt(square: string): boolean {
     const fen = this.position();
     const position = this.parseFEN(fen);
 
-    const file = square.charCodeAt(0) - 97; // a=0, b=1, ..., h=7
-    const rank = 8 - parseInt(square.charAt(1)); // 8=0, 7=1, ..., 1=7
+    const file = square.charCodeAt(0) - 97;
+    const rank = 8 - parseInt(square.charAt(1));
 
     const piece = position[rank]?.[file];
     if (!piece) return false;
@@ -385,30 +513,14 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     return isWhitePiece === weAreWhite;
   }
 
-  /**
-   * Handle piece drag start
-   */
   onDragStart(square: string, piece: string): void {
-    if (!this.draggable()) {
-      return;
-    }
+    if (!this.draggable()) return;
     this.draggedPiece = { square, piece };
   }
 
-  /**
-   * Handle piece drop
-   */
   onDrop(targetSquare: string): void {
-    if (!this.draggedPiece) {
-      return;
-    }
-
-    const move: MoveEvent = {
-      from: this.draggedPiece.square,
-      to: targetSquare
-    };
-
-    this.moveChange.emit(move);
+    if (!this.draggedPiece) return;
+    this.moveChange.emit({ from: this.draggedPiece.square, to: targetSquare });
     this.draggedPiece = null;
   }
 }
