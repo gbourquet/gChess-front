@@ -92,6 +92,7 @@
             [position]="displayPosition()"
             [orientation]="boardOrientation()"
             [draggable]="isAtLatestMove() && (isMyTurn() ?? false) && (state.gameStatus === 'IN_PROGRESS' || state.gameStatus === 'CHECK')"
+            [premoveAllowed]="isAtLatestMove() && !(isMyTurn() ?? false) && (state.gameStatus === 'IN_PROGRESS' || state.gameStatus === 'CHECK')"
             [size]="boardSize()"
             [lastMove]="displayLastMove()"
             [isCheck]="state.isCheck"
