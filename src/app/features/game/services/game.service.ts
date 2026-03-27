@@ -367,10 +367,6 @@ export class GameService {
                        sessionStorage.getItem('currentPlayerId') ||
                        '';
 
-    // Get my username from stored user
-    const currentUser = this.tokenStorage.getUser();
-    const myUsername = currentUser?.username;
-
     // Get last move from history
     const lastMove = message.moveHistory.length > 0
       ? message.moveHistory[message.moveHistory.length - 1]
@@ -384,13 +380,13 @@ export class GameService {
       gameId: message.gameId,
       whitePlayer: {
         playerId: message.whitePlayerId,
-        username: myColor === 'WHITE' ? myUsername : undefined,
+        username: message.whiteUsername,
         isConnected: true,
         capturedPieces: whiteCaptured
       },
       blackPlayer: {
         playerId: message.blackPlayerId,
-        username: myColor === 'BLACK' ? myUsername : undefined,
+        username: message.blackUsername,
         isConnected: true,
         capturedPieces: blackCaptured
       },
