@@ -43,7 +43,7 @@
 
               <div class="info-section">
                 <span class="opponent">vs {{ entry.opponentUsername }}</span>
-                <span class="move-count">{{ entry.moveCount }} coups</span>
+                <span class="move-count">{{ Math.ceil(entry.moveCount / 2) }} coups</span>
               </div>
 
               <div class="meta-section">

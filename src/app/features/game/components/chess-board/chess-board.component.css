@@ -47,7 +47,7 @@
 .board-with-coordinates.hide-coords .coordinates-bottom,
 .board-with-coordinates.hide-coords .coordinates-left,
 .board-with-coordinates.hide-coords .coordinates-right {
-  display: none;
+  visibility: hidden;
 }
 
 .board-row {
@@ -78,7 +78,7 @@
   font-weight: 400;
   color: var(--cyan-dim, #0097a7);
   text-transform: lowercase;
-  width: 60px;
+  width: var(--sq, 60px);
   height: 16px;
   opacity: 0.7;
   font-family: 'Share Tech Mono', monospace;
@@ -92,7 +92,7 @@
   font-size: 10px;
   font-weight: 400;
   color: var(--cyan-dim, #0097a7);
-  height: 60px;
+  height: var(--sq, 60px);
   width: 18px;
   opacity: 0.7;
   font-family: 'Share Tech Mono', monospace;
@@ -115,8 +115,8 @@
 }
 
 @keyframes last-move-pulse {
-  0%, 100% { box-shadow: inset 0 0 0 2px #00e5ff, 0 0 4px rgba(0, 229, 255, 0.3); }
-  50% { box-shadow: inset 0 0 0 3px #00e5ff, 0 0 12px rgba(0, 229, 255, 0.6); }
+  0%, 100% { box-shadow: inset 0 0 0 2px rgba(180, 220, 255, 0.5); }
+  50% { box-shadow: inset 0 0 0 3px rgba(180, 220, 255, 0.8); }
 }
 
 /* Check neon red pulse */
