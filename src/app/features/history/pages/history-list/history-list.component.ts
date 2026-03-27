@@ -27,6 +27,7 @@ import { GameHistoryEntry } from '../../models/game-history.model';
   styleUrl: './history-list.component.css',
 })
 export class HistoryListComponent implements OnInit {
+  protected readonly Math = Math;
   private readonly historyService = inject(GameHistoryService);
   private readonly tokenStorage = inject(TokenStorageService);
   private readonly router = inject(Router);

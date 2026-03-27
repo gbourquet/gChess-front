@@ -58,6 +58,7 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
 
   // View references
   boardContainer = viewChild.required<ElementRef>('boardContainer');
+  coordWrapper = viewChild.required<ElementRef>('coordWrapper');
 
   private board: any = null;
   private draggedPiece: { square: string; piece: string } | null = null;
@@ -211,6 +212,7 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
   private renderBoard(): void {
     const container = this.boardContainer().nativeElement;
     const size = this.size();
+    this.coordWrapper().nativeElement.style.setProperty('--sq', `${size / 8}px`);
     const orient = this.orientation();
     const fen = this.position();
 
@@ -255,18 +257,17 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
 
         // Background priority: selected > premove > lastMove > normal
         if (isSelected) {
-          square.style.backgroundColor = isLight ? '#4a1a5a' : '#2d0a3a';
-          square.style.boxShadow = 'inset 0 0 0 2px #e040fb, 0 0 8px rgba(224,64,251,0.5)';
+          square.style.backgroundColor = isLight ? '#6a8f6a' : '#3d6a3d';
+          square.style.boxShadow = 'inset 0 0 0 2px rgba(255,255,255,0.35)';
         } else if (isPremoveFrom || isPremoveTo || isPremoveSelecting) {
-          // Orange/amber for confirmed premove squares and selecting square
-          square.style.backgroundColor = isLight ? '#3d2800' : '#261900';
-          square.style.boxShadow = 'inset 0 0 0 2px #ff9800, 0 0 8px rgba(255,152,0,0.4)';
+          square.style.backgroundColor = isLight ? '#8a6a30' : '#5a4010';
+          square.style.boxShadow = 'inset 0 0 0 2px rgba(255,200,80,0.5)';
         } else if (isPartOfLastMove) {
           square.classList.add('last-move-square');
-          square.style.backgroundColor = isLight ? '#1a3a3a' : '#0d2020';
+          square.style.backgroundColor = isLight ? '#7a8a5a' : '#3a4a20';
           square.style.boxShadow = '';
         } else {
-          square.style.backgroundColor = isLight ? '#254525' : '#0d160d';
+          square.style.backgroundColor = isLight ? '#5c7a8a' : '#2a3f4f';
           square.style.boxShadow = '';
         }
 
@@ -299,16 +300,6 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
         if (piece) {
           const isWhitePiece = piece === piece.toUpperCase();
 
-          const halo = document.createElement('div');
-          halo.style.width = '100%';
-          halo.style.height = '100%';
-          halo.style.display = 'flex';
-          halo.style.alignItems = 'center';
-          halo.style.justifyContent = 'center';
-          halo.style.background = isWhitePiece
-            ? 'radial-gradient(circle, rgba(0,229,255,0.12) 28%, transparent 65%)'
-            : 'radial-gradient(circle, rgba(224,64,251,0.12) 28%, transparent 65%)';
-
           const pieceElement = document.createElement('span');
           pieceElement.textContent = this.getPieceUnicode(piece);
           pieceElement.style.fontSize = '48px';
@@ -316,17 +307,15 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
           pieceElement.style.display = 'block';
 
           if (isWhitePiece) {
-            pieceElement.style.color = '#ffffff';
+            pieceElement.style.color = '#c8bfaa';
             pieceElement.style.filter =
-              'drop-shadow(0 0 4px rgba(0,229,255,0.7)) drop-shadow(0 1px 1px rgba(0,0,0,0.9))';
+              'drop-shadow(0 1px 3px rgba(0,0,0,0.85))';
           } else {
-            pieceElement.style.color = '#cccccc';
+            pieceElement.style.color = '#050505';
             pieceElement.style.filter =
-              'drop-shadow(0 0 4px rgba(224,64,251,0.7)) drop-shadow(0 1px 1px rgba(0,0,0,0.9))';
+              'drop-shadow(0 0 2px rgba(150,150,150,0.65)) drop-shadow(0 1px 2px rgba(0,0,0,0.9))';
           }
-
-          halo.appendChild(pieceElement);
-          square.appendChild(halo);
+          square.appendChild(pieceElement);
         }
 
         // Legal move hint (our turn) — cyan

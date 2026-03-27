@@ -1,12 +1,15 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ChessBoardComponent } from '../../../game/components/chess-board/chess-board.component';
 import { MoveHistoryComponent } from '../../../game/components/move-history/move-history.component';
+import { GameClockComponent } from '../../../game/components/game-clock/game-clock.component';
 import { GameHistoryService } from '../../services/game-history.service';
+import { TokenStorageService } from '../../../../core/auth/services/token-storage.service';
 import { GameHistoryEntry, MoveSummaryDTO } from '../../models/game-history.model';
 import { GameStatus } from '../../../../core/websocket/models/common.model';
 import { Move } from '../../../../core/websocket/models';
@@ -22,6 +25,7 @@ import { calculateFenAtMove } from '../../../game/utils/chess-replay.util';
     MatProgressSpinnerModule,
     ChessBoardComponent,
     MoveHistoryComponent,
+    GameClockComponent,
   ],
   templateUrl: './game-review.component.html',
   styleUrl: './game-review.component.css',
@@ -30,6 +34,7 @@ export class GameReviewComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly historyService = inject(GameHistoryService);
+  private readonly tokenStorage = inject(TokenStorageService);
 
   moveDTOs = signal<MoveSummaryDTO[]>([]);
   currentMoveIndex = signal<number>(-1);
@@ -56,6 +61,106 @@ export class GameReviewComponent implements OnInit {
     this.moves().length > 0 && this.currentMoveIndex() === this.moves().length - 1
   );
 
+  // Clock snapshots: index 0 = initial position, index i+1 = after move i.
+  // null = no per-move data (fallback to start/end times only).
+  private clocksHistory = computed(() => {
+    const summary = this.gameSummary();
+    const totalSec = summary?.totalTimeSeconds;
+    if (!totalSec) return null;
+
+    const startMs = totalSec * 1000;
+    const incrementMs = (summary!.incrementSeconds ?? 0) * 1000;
+    const dtos = this.moveDTOs();
+    const hasTimes = dtos.some(d => d.timeSpentMs != null);
+    if (!hasTimes) return null;
+
+    const snapshots: { whiteMs: number; blackMs: number }[] = [{ whiteMs: startMs, blackMs: startMs }];
+    let whiteMs = startMs;
+    let blackMs = startMs;
+
+    for (let i = 0; i < dtos.length; i++) {
+      const spent = dtos[i].timeSpentMs ?? 0;
+      if (i % 2 === 0) {
+        whiteMs = Math.min(startMs, Math.max(0, whiteMs - spent) + incrementMs);
+      } else {
+        blackMs = Math.min(startMs, Math.max(0, blackMs - spent) + incrementMs);
+      }
+      snapshots.push({ whiteMs, blackMs });
+    }
+
+    return snapshots;
+  });
+
+  boardOrientation = computed<'white' | 'black'>(() => {
+    const summary = this.gameSummary();
+    const username = this.tokenStorage.getUser()?.username;
+    if (!summary || !username) return 'white';
+    if (username === summary.blackUsername) return 'black';
+    return 'white';
+  });
+
+  // Top = opponent side, bottom = current player side
+  topUsername = computed(() => {
+    const s = this.gameSummary();
+    return this.boardOrientation() === 'white' ? s?.blackUsername : s?.whiteUsername;
+  });
+  bottomUsername = computed(() => {
+    const s = this.gameSummary();
+    return this.boardOrientation() === 'white' ? s?.whiteUsername : s?.blackUsername;
+  });
+  topTimeMs = computed(() =>
+    this.boardOrientation() === 'white' ? this.currentBlackMs() : this.currentWhiteMs()
+  );
+  bottomTimeMs = computed(() =>
+    this.boardOrientation() === 'white' ? this.currentWhiteMs() : this.currentBlackMs()
+  );
+
+  hasClocks = computed(() => {
+    const summary = this.gameSummary();
+    if (!summary) return false;
+    const hasTotalTime = !!summary.totalTimeSeconds;
+    const hasFinalTimes = summary.whiteTimeRemainingMs != null && summary.blackTimeRemainingMs != null;
+    return hasTotalTime || hasFinalTimes;
+  });
+
+  currentWhiteMs = computed(() => {
+    const history = this.clocksHistory();
+    const summary = this.gameSummary();
+    const idx = this.currentMoveIndex();
+    const moveCount = this.moveDTOs().length;
+
+    if (history) {
+      return history[idx + 1]?.whiteMs ?? null;
+    }
+    // Fallback: start time at initial, final time at last position
+    if (summary?.totalTimeSeconds && idx < 0) {
+      return summary.totalTimeSeconds * 1000;
+    }
+    if (summary?.whiteTimeRemainingMs != null && idx === moveCount - 1) {
+      return summary.whiteTimeRemainingMs;
+    }
+    return null;
+  });
+
+  currentBlackMs = computed(() => {
+    const history = this.clocksHistory();
+    const summary = this.gameSummary();
+    const idx = this.currentMoveIndex();
+    const moveCount = this.moveDTOs().length;
+
+    if (history) {
+      return history[idx + 1]?.blackMs ?? null;
+    }
+    // Fallback: start time at initial, final time at last position
+    if (summary?.totalTimeSeconds && idx < 0) {
+      return summary.totalTimeSeconds * 1000;
+    }
+    if (summary?.blackTimeRemainingMs != null && idx === moveCount - 1) {
+      return summary.blackTimeRemainingMs;
+    }
+    return null;
+  });
+
   resultBanner = computed(() => {
     const summary = this.gameSummary();
     if (!summary) return null;
@@ -78,17 +183,29 @@ export class GameReviewComponent implements OnInit {
 
   ngOnInit(): void {
     const gameId = this.route.snapshot.paramMap.get('gameId')!;
-    this.historyService.getMoves(gameId).subscribe({
-      next: (dtos) => {
-        this.moveDTOs.set(dtos);
-        this.currentMoveIndex.set(-1);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.error.set('Impossible de charger les coups de cette partie');
-        this.loading.set(false);
-      },
-    });
+
+    const moves$ = this.historyService.getMoves(gameId);
+
+    if (this.gameSummary()) {
+      moves$.subscribe({
+        next: (dtos) => { this.moveDTOs.set(dtos); this.loading.set(false); },
+        error: () => { this.error.set('Impossible de charger les coups de cette partie'); this.loading.set(false); },
+      });
+    } else {
+      // Nav state lost (direct URL, refresh) — fetch both in parallel
+      forkJoin({ moves: moves$, games: this.historyService.getGames() }).subscribe({
+        next: ({ moves, games }) => {
+          const currentUserId = this.tokenStorage.getUser()?.userId;
+          const dto = games.find(g => g.gameId === gameId);
+          if (dto && currentUserId) {
+            this.gameSummary.set(this.historyService.toHistoryEntry(dto, currentUserId));
+          }
+          this.moveDTOs.set(moves);
+          this.loading.set(false);
+        },
+        error: () => { this.error.set('Impossible de charger les coups de cette partie'); this.loading.set(false); },
+      });
+    }
   }
 
   private statusLabel(status: GameStatus): string {

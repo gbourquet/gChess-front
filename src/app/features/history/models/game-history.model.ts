@@ -34,5 +34,9 @@ export interface GameHistoryEntry {
   status: GameStatus;
   moveCount: number;
   timeControlLabel?: string; // e.g. "3+2", "10+0"
+  totalTimeSeconds?: number;
+  incrementSeconds?: number;
+  whiteTimeRemainingMs?: number;
+  blackTimeRemainingMs?: number;
   playedAt?: Date;
 }

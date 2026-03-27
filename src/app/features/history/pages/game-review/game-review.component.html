@@ -21,35 +21,26 @@
   } @else {
     <div class="review-layout">
       <div class="board-section">
-        <mat-card class="board-card">
-          <mat-card-content>
-            <app-chess-board
-              [position]="currentFen()"
-              orientation="white"
-              [draggable]="false"
-              [size]="460"
-            />
-          </mat-card-content>
-        </mat-card>
+        <div class="clock-row">
+          <span class="clock-label">{{ topUsername() }}</span>
+          @if (hasClocks()) {
+            <app-game-clock [remainingMs]="topTimeMs()" [isActive]="false" />
+          }
+        </div>
 
-        <!-- Result banner — shown when reaching the final position -->
-        @if (isAtEnd() && resultBanner(); as banner) {
-          <div class="result-banner" [class.draw]="!banner.winnerSide">
-            <mat-icon class="banner-icon">
-              {{ banner.winnerSide ? 'emoji_events' : 'handshake' }}
-            </mat-icon>
-            <div class="banner-text">
-              <span class="banner-main">
-                @if (banner.winnerSide) {
-                  {{ banner.winnerSide }} gagnent · {{ banner.winner }}
-                } @else {
-                  Partie nulle
-                }
-              </span>
-              <span class="banner-reason">{{ banner.reason }}</span>
-            </div>
-          </div>
-        }
+        <app-chess-board
+          [position]="currentFen()"
+          [orientation]="boardOrientation()"
+          [draggable]="false"
+          [size]="460"
+        />
+
+        <div class="clock-row">
+          <span class="clock-label">{{ bottomUsername() }}</span>
+          @if (hasClocks()) {
+            <app-game-clock [remainingMs]="bottomTimeMs()" [isActive]="false" />
+          }
+        </div>
 
         <!-- Navigation controls -->
         <div class="nav-controls">
@@ -72,6 +63,23 @@
       </div>
 
       <div class="history-section">
+        @if (resultBanner(); as banner) {
+          <div class="result-banner" [class.draw]="!banner.winnerSide" [class.banner-hidden]="!isAtEnd()">
+            <mat-icon class="banner-icon">
+              {{ banner.winnerSide ? 'emoji_events' : 'handshake' }}
+            </mat-icon>
+            <div class="banner-text">
+              <span class="banner-main">
+                @if (banner.winnerSide) {
+                  {{ banner.winnerSide }} gagnent · {{ banner.winner }}
+                } @else {
+                  Partie nulle
+                }
+              </span>
+              <span class="banner-reason">{{ banner.reason }}</span>
+            </div>
+          </div>
+        }
         <app-move-history [moveHistory]="moves()" />
       </div>
     </div>

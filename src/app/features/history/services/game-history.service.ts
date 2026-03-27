@@ -50,6 +50,10 @@ export class GameHistoryService {
       status: dto.status,
       moveCount: dto.moveCount,
       timeControlLabel,
+      totalTimeSeconds: dto.totalTimeSeconds,
+      incrementSeconds: dto.incrementSeconds,
+      whiteTimeRemainingMs: dto.whiteTimeRemainingMs,
+      blackTimeRemainingMs: dto.blackTimeRemainingMs,
       playedAt: dto.playedAt ? new Date(dto.playedAt) : undefined,
     };
   }
