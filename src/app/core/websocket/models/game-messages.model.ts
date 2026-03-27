@@ -34,6 +34,8 @@ export interface GameStateSyncMessage {
   gameId: string;
   whitePlayerId: string;
   blackPlayerId: string;
+  whiteUsername: string;
+  blackUsername: string;
   positionFen: string;
   gameStatus: GameStatus;
   currentSide: Color;
