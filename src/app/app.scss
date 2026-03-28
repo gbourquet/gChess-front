@@ -6,8 +6,10 @@
   right: 0;
   z-index: 1000;
   height: 52px;
-  background: rgba(10, 10, 15, 0.95);
-  border-bottom: 1px solid var(--cyan-dim, #0097a7);
+  background: rgba(8, 19, 31, 0.95);
+  border-bottom: 1px solid var(--cyan, #00e5ff);
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(0, 229, 255, 0.3);
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
@@ -17,26 +19,19 @@
 }
 
 .nav-logo {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 18px;
-  font-weight: 900;
-  color: var(--text-primary, #e8e8f0);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
   text-decoration: none;
-  letter-spacing: 2px;
   white-space: nowrap;
   flex-shrink: 0;
 
   .logo-g {
-    color: var(--text-primary, #e8e8f0);
+    color: var(--cyan, #00e5ff);
   }
 
   .logo-accent {
-    color: var(--cyan, #00e5ff);
-    text-shadow: 0 0 10px var(--cyan, #00e5ff);
-  }
-
-  &:hover .logo-accent {
-    text-shadow: 0 0 20px var(--cyan, #00e5ff), 0 0 40px rgba(0, 229, 255, 0.4);
+    color: var(--text-primary, #e8e8f0);
   }
 }
 
@@ -46,25 +41,24 @@
   flex: 1;
 
   a {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--text-secondary, #6868a0);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary, #8899AA);
     text-decoration: none;
     padding: 6px 12px;
-    transition: color 0.2s, text-shadow 0.2s;
+    border-radius: 8px;
+    transition: color 0.2s, background 0.2s;
 
     &:hover {
       color: var(--cyan, #00e5ff);
-      text-shadow: 0 0 8px var(--cyan, #00e5ff);
+      background: rgba(0, 229, 255, 0.08);
     }
 
     &.active {
       color: var(--cyan, #00e5ff);
+      background: rgba(0, 229, 255, 0.1);
       border-bottom: 2px solid var(--cyan, #00e5ff);
-      text-shadow: 0 0 6px var(--cyan, #00e5ff);
     }
   }
 }
@@ -75,21 +69,19 @@
 
   .profile-btn {
     color: var(--text-primary, #e8e8f0) !important;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 1px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
     display: flex;
     align-items: center;
     gap: 6px;
 
     .profile-username {
-      font-weight: 700;
-      text-transform: uppercase;
+      font-weight: 600;
     }
 
     mat-icon {
-      color: var(--cyan-dim, #0097a7);
+      color: var(--cyan-dim, #00b8cc);
     }
 
     &:hover {
@@ -121,81 +113,8 @@
 
   &.authenticated {
     padding-top: 52px;
-    padding-bottom: 36px;
     min-height: 100vh;
     box-sizing: border-box;
   }
 }
 
-// Bottom Bar
-.bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  height: 36px;
-  background: rgba(10, 10, 15, 0.95);
-  border-top: 1px solid var(--arena-border-bright, #3a3a5a);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 16px;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.6);
-}
-
-.bottom-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.bar-btn {
-  background: transparent;
-  border: 1px solid transparent;
-  color: var(--text-secondary, #6868a0);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  padding: 2px 8px;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-
-  mat-icon {
-    font-size: 14px;
-    width: 14px;
-    height: 14px;
-  }
-
-  &:hover {
-    color: var(--cyan, #00e5ff);
-    border-color: var(--arena-border-bright, #3a3a5a);
-  }
-
-  &.active-opt {
-    color: var(--cyan, #00e5ff);
-    border-color: var(--cyan-dim, #0097a7);
-    background: rgba(0, 229, 255, 0.06);
-    text-shadow: 0 0 6px rgba(0, 229, 255, 0.5);
-  }
-}
-
-.bar-sep {
-  color: var(--arena-border-bright, #3a3a5a);
-  font-size: 14px;
-  user-select: none;
-}
-
-.bar-label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  color: var(--text-secondary, #6868a0);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  white-space: nowrap;
-}
