@@ -12,12 +12,12 @@
 }
 
 .frame-btn {
-  background: linear-gradient(135deg, #1e1e2a, #141420);
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
+  background: var(--bg-card, #0A1E30);
+  border: 1px solid rgba(0, 229, 255, 0.2);
   color: var(--cyan, #00e5ff);
   width: 28px;
   height: 28px;
-  border-radius: 2px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   display: flex;
@@ -37,10 +37,13 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  background: linear-gradient(135deg, #1a1a25 0%, #0d0d14 50%, #1a1a25 100%);
-  padding: 12px;
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
-  box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.1), 0 4px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, #6A4010 0%, #B8852A 50%, #6A4010 100%);
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(0, 229, 255, 0.08),
+    inset 0 1px 0 rgba(184, 133, 42, 0.5);
 }
 
 .board-with-coordinates.hide-coords .coordinates-top,
@@ -74,34 +77,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
-  font-weight: 400;
-  color: var(--cyan-dim, #0097a7);
+  font-size: 9px;
+  font-weight: 700;
+  color: #E8D5A3;
   text-transform: lowercase;
   width: var(--sq, 60px);
-  height: 16px;
-  opacity: 0.7;
-  font-family: 'Share Tech Mono', monospace;
+  height: 14px;
   letter-spacing: 0.5px;
+  font-family: 'Fredoka', sans-serif;
 }
 
 .rank-label {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
-  font-weight: 400;
-  color: var(--cyan-dim, #0097a7);
+  font-size: 9px;
+  font-weight: 700;
+  color: #E8D5A3;
   height: var(--sq, 60px);
-  width: 18px;
-  opacity: 0.7;
-  font-family: 'Share Tech Mono', monospace;
+  width: 14px;
   letter-spacing: 0.5px;
+  font-family: 'Fredoka', sans-serif;
 }
 
 .corner-spacer {
-  width: 18px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 .board-container {
@@ -109,67 +110,43 @@
   overflow: hidden;
 }
 
-/* Last move pulsing cyan outline */
-.last-move-square {
-  animation: last-move-pulse 1.5s ease-in-out infinite;
+/* Last move gold overlay — same as mobile (FFD700 @ 0.44 alpha) */
+.last-move-square::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 215, 0, 0.44);
+  pointer-events: none;
+  z-index: 1;
 }
 
-@keyframes last-move-pulse {
-  0%, 100% { box-shadow: inset 0 0 0 2px rgba(180, 220, 255, 0.5); }
-  50% { box-shadow: inset 0 0 0 3px rgba(180, 220, 255, 0.8); }
-}
-
-/* Check neon red pulse */
+/* Check red pulse */
 .check-square {
   animation: check-pulse 0.8s ease-in-out infinite;
-  background-color: rgba(255, 23, 68, 0.5) !important;
+  background-color: rgba(255, 68, 68, 0.5) !important;
 }
 
 @keyframes check-pulse {
-  0%, 100% { box-shadow: inset 0 0 0 2px #ff1744, 0 0 8px rgba(255, 23, 68, 0.5); }
-  50% { box-shadow: inset 0 0 0 3px #ff1744, 0 0 20px rgba(255, 23, 68, 0.8); background-color: rgba(255, 23, 68, 0.7) !important; }
+  0%, 100% { box-shadow: inset 0 0 0 2px #FF4444, 0 0 8px rgba(255, 68, 68, 0.5); }
+  50% { box-shadow: inset 0 0 0 3px #FF4444, 0 0 20px rgba(255, 68, 68, 0.8); background-color: rgba(255, 68, 68, 0.7) !important; }
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
   .file-label {
-    font-size: 9px;
+    font-size: 8px;
     width: auto;
-    height: 14px;
+    height: 12px;
   }
 
-  .rank-label {
-    font-size: 9px;
-    height: auto;
-    width: 15px;
-  }
-
-  .corner-spacer {
-    width: 15px;
-    height: 14px;
-  }
-
-  .board-with-coordinates {
-    padding: 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .file-label,
   .rank-label {
     font-size: 8px;
-  }
-
-  .rank-label {
+    height: auto;
     width: 12px;
   }
 
   .corner-spacer {
     width: 12px;
     height: 12px;
-  }
-
-  .board-with-coordinates {
-    padding: 6px;
   }
 }

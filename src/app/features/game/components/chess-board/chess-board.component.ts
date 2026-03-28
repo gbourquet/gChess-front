@@ -48,6 +48,7 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
   lastMove = input<LastMove | null>(null); // Highlight last move
   isCheck = input<boolean>(false);
   currentSide = input<'white' | 'black'>('white');
+  showFrameControls = input<boolean>(true);
 
   // Outputs
   moveChange = output<MoveEvent>();
@@ -223,7 +224,7 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     container.style.display = 'grid';
     container.style.gridTemplateColumns = 'repeat(8, 1fr)';
     container.style.gridTemplateRows = 'repeat(8, 1fr)';
-    container.style.border = '2px solid #333';
+    container.style.border = 'none';
 
     const position = this.parseFEN(fen);
 
@@ -257,17 +258,17 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
 
         // Background priority: selected > premove > lastMove > normal
         if (isSelected) {
-          square.style.backgroundColor = isLight ? '#6a8f6a' : '#3d6a3d';
-          square.style.boxShadow = 'inset 0 0 0 2px rgba(255,255,255,0.35)';
+          square.style.backgroundColor = isLight ? '#d4b800' : '#a09000';
+          square.style.boxShadow = 'inset 0 0 0 2px rgba(255,255,255,0.4)';
         } else if (isPremoveFrom || isPremoveTo || isPremoveSelecting) {
-          square.style.backgroundColor = isLight ? '#8a6a30' : '#5a4010';
-          square.style.boxShadow = 'inset 0 0 0 2px rgba(255,200,80,0.5)';
+          square.style.backgroundColor = isLight ? '#c06820' : '#904800';
+          square.style.boxShadow = 'inset 0 0 0 2px rgba(255,140,0,0.5)';
         } else if (isPartOfLastMove) {
           square.classList.add('last-move-square');
-          square.style.backgroundColor = isLight ? '#7a8a5a' : '#3a4a20';
+          square.style.backgroundColor = isLight ? '#E8D5A3' : '#527A52';
           square.style.boxShadow = '';
         } else {
-          square.style.backgroundColor = isLight ? '#5c7a8a' : '#2a3f4f';
+          square.style.backgroundColor = isLight ? '#E8D5A3' : '#527A52';
           square.style.boxShadow = '';
         }
 
@@ -295,37 +296,31 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
         square.title = squareNotation;
         square.dataset['square'] = squareNotation;
 
-        // Piece rendering
+        // Piece rendering (SVG)
         const piece = position[boardRow]?.[boardCol];
         if (piece) {
-          const isWhitePiece = piece === piece.toUpperCase();
-
-          const pieceElement = document.createElement('span');
-          pieceElement.textContent = this.getPieceUnicode(piece);
-          pieceElement.style.fontSize = '48px';
-          pieceElement.style.lineHeight = '1';
+          const pieceElement = document.createElement('img');
+          pieceElement.src = this.getPieceSvgPath(piece);
+          pieceElement.alt = piece;
+          pieceElement.draggable = false;
+          pieceElement.style.width = '82%';
+          pieceElement.style.height = '82%';
+          pieceElement.style.objectFit = 'contain';
           pieceElement.style.display = 'block';
-
-          if (isWhitePiece) {
-            pieceElement.style.color = '#c8bfaa';
-            pieceElement.style.filter =
-              'drop-shadow(0 1px 3px rgba(0,0,0,0.85))';
-          } else {
-            pieceElement.style.color = '#050505';
-            pieceElement.style.filter =
-              'drop-shadow(0 0 2px rgba(150,150,150,0.65)) drop-shadow(0 1px 2px rgba(0,0,0,0.9))';
-          }
+          pieceElement.style.pointerEvents = 'none';
+          pieceElement.style.position = 'relative';
+          pieceElement.style.zIndex = '2';
           square.appendChild(pieceElement);
         }
 
-        // Legal move hint (our turn) — cyan
+        // Legal move hint (our turn) — green like mobile
         if (isLegalTarget) {
-          square.appendChild(this.makeMoveHint(hasPiece, 'rgba(0,229,255,0.45)', 'rgba(0,229,255,0.7)', '0 0 6px rgba(0,229,255,0.4)'));
+          square.appendChild(this.makeMoveHint(hasPiece, 'rgba(0,230,118,0.75)', 'rgba(0,230,118,0.9)', '0 0 6px rgba(0,230,118,0.4)'));
         }
 
-        // Premove hint — same cyan as regular move hints
+        // Premove hint — orange
         if (isPremoveTarget) {
-          square.appendChild(this.makeMoveHint(hasPiece, 'rgba(0,229,255,0.45)', 'rgba(0,229,255,0.7)', '0 0 6px rgba(0,229,255,0.4)'));
+          square.appendChild(this.makeMoveHint(hasPiece, 'rgba(255,140,0,0.6)', 'rgba(255,140,0,0.8)', '0 0 6px rgba(255,140,0,0.4)'));
         }
 
         // Click handlers
@@ -349,10 +344,11 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     if (hasPiece) {
       hint.style.width = '100%';
       hint.style.height = '100%';
-      hint.style.boxShadow = `inset 0 0 0 4px ${ringColor}`;
+      hint.style.borderRadius = '50%';
+      hint.style.boxShadow = `inset 0 0 0 3px ${ringColor}`;
     } else {
-      hint.style.width = '33%';
-      hint.style.height = '33%';
+      hint.style.width = '14px';
+      hint.style.height = '14px';
       hint.style.borderRadius = '50%';
       hint.style.background = dotColor;
       hint.style.boxShadow = dotShadow;
@@ -389,12 +385,10 @@ export class ChessBoardComponent implements AfterViewInit, OnDestroy {
     return board;
   }
 
-  private getPieceUnicode(piece: string): string {
-    const pieces: { [key: string]: string } = {
-      'K': '♚', 'Q': '♛', 'R': '♜', 'B': '♝', 'N': '♞', 'P': '♟',
-      'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
-    };
-    return pieces[piece] || '';
+  private getPieceSvgPath(piece: string): string {
+    const colorPrefix = piece === piece.toUpperCase() ? 'w' : 'b';
+    const pieceType = piece.toUpperCase();
+    return `pieces/${colorPrefix}${pieceType}.svg`;
   }
 
   /** Handle click during our turn (regular move) */

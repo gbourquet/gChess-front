@@ -1,7 +1,9 @@
 <div class="player-panel" [class.active-player]="isCurrentPlayer()">
   <div class="player-main">
-    <!-- Piece unicode indicator (king symbol) -->
-    <span class="piece-indicator">{{ color() === 'WHITE' ? '♔' : '♚' }}</span>
+    <!-- Avatar circle with initial letter -->
+    <div class="avatar" [class.avatar-active]="isCurrentPlayer()">
+      <span class="avatar-letter">{{ (player().username || getColorLabel())[0].toUpperCase() }}</span>
+    </div>
 
     <!-- Username -->
     <div class="player-name-block">
@@ -22,24 +24,22 @@
     </span>
   </div>
 
-  <!-- Captured pieces row -->
-  @if (player().capturedPieces && hasCapturedPieces()) {
-    <div class="captured-row">
-      @for (i of getRepeatedArray(player().capturedPieces!.queens); track $index) {
-        <span class="cap-piece">{{ getPieceUnicode('queens') }}</span>
-      }
-      @for (i of getRepeatedArray(player().capturedPieces!.rooks); track $index) {
-        <span class="cap-piece">{{ getPieceUnicode('rooks') }}</span>
-      }
-      @for (i of getRepeatedArray(player().capturedPieces!.bishops); track $index) {
-        <span class="cap-piece">{{ getPieceUnicode('bishops') }}</span>
-      }
-      @for (i of getRepeatedArray(player().capturedPieces!.knights); track $index) {
-        <span class="cap-piece">{{ getPieceUnicode('knights') }}</span>
-      }
-      @for (i of getRepeatedArray(player().capturedPieces!.pawns); track $index) {
-        <span class="cap-piece">{{ getPieceUnicode('pawns') }}</span>
-      }
-    </div>
-  }
+  <!-- Captured pieces row — always rendered to reserve height -->
+  <div class="captured-row">
+    @for (i of getRepeatedArray(player().capturedPieces?.queens ?? 0); track $index) {
+      <span class="cap-piece">{{ getPieceUnicode('queens') }}</span>
+    }
+    @for (i of getRepeatedArray(player().capturedPieces?.rooks ?? 0); track $index) {
+      <span class="cap-piece">{{ getPieceUnicode('rooks') }}</span>
+    }
+    @for (i of getRepeatedArray(player().capturedPieces?.bishops ?? 0); track $index) {
+      <span class="cap-piece">{{ getPieceUnicode('bishops') }}</span>
+    }
+    @for (i of getRepeatedArray(player().capturedPieces?.knights ?? 0); track $index) {
+      <span class="cap-piece">{{ getPieceUnicode('knights') }}</span>
+    }
+    @for (i of getRepeatedArray(player().capturedPieces?.pawns ?? 0); track $index) {
+      <span class="cap-piece">{{ getPieceUnicode('pawns') }}</span>
+    }
+  </div>
 </div>

@@ -24,13 +24,6 @@ export class GameStatusComponent {
   winnerColor = input<Color | null>(null);
 
   /**
-   * Get turn label
-   */
-  turnLabel = computed(() => {
-    return this.currentSide() === 'WHITE' ? 'Au tour des Blancs' : 'Au tour des Noirs';
-  });
-
-  /**
    * Get status label
    */
   statusLabel = computed(() => {
@@ -41,9 +34,9 @@ export class GameStatusComponent {
       case 'IN_PROGRESS':
       case 'CHECK':
         if (isCheck) {
-          return this.isMyTurn() ? 'Échec ! C\'est votre tour' : 'Échec ! Tour de l\'adversaire';
+          return 'Échec !';
         }
-        return this.isMyTurn() ? 'C\'est votre tour !' : 'Tour de l\'adversaire';
+        return '';
       case 'CHECKMATE':
         const winner = this.currentSide() === 'WHITE' ? 'Noirs' : 'Blancs';
         return `Échec et mat ! ${winner} gagnent`;
