@@ -1,23 +1,15 @@
 <mat-card class="game-status-card">
   <mat-card-content>
     <div class="status-container">
-      <!-- Turn indicator - only show when game is not over -->
-      @if (!isGameOver()) {
-        <div class="turn-indicator">
-          <mat-icon [class.white-turn]="currentSide() === 'WHITE'" [class.black-turn]="currentSide() === 'BLACK'">
-            {{ currentSide() === 'WHITE' ? 'radio_button_unchecked' : 'circle' }}
-          </mat-icon>
-          <span class="turn-text">{{ turnLabel() }}</span>
-        </div>
+      <!-- Status chip - only show for check or game over -->
+      @if (isCheck() || isGameOver()) {
+        <mat-chip-set aria-label="Game status">
+          <mat-chip [color]="statusColor()" highlighted>
+            <mat-icon matChipAvatar>{{ statusIcon() }}</mat-icon>
+            {{ statusLabel() }}
+          </mat-chip>
+        </mat-chip-set>
       }
-
-      <!-- Status chip -->
-      <mat-chip-set aria-label="Game status">
-        <mat-chip [color]="statusColor()" highlighted>
-          <mat-icon matChipAvatar>{{ statusIcon() }}</mat-icon>
-          {{ statusLabel() }}
-        </mat-chip>
-      </mat-chip-set>
 
       <!-- Game over message -->
       @if (isGameOver()) {

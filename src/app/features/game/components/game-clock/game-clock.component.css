@@ -1,42 +1,68 @@
 .clock-container {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6px 14px;
-  background: #0a0a10;
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
-  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
-  transition: border-color 0.3s ease;
+  width: 120px;
+  min-height: 0;
+  background: var(--clock-bg, #040C18);
+  border: 1.5px solid rgba(0, 229, 255, 0.4);
+  border-radius: 10px;
+  padding: 6px 10px;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.25);
+  flex-shrink: 0;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .clock-time {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 1.5rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  color: var(--text-secondary, #6868a0);
+  font-family: 'Orbitron', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-secondary, #8899AA);
+  line-height: 1.1;
+}
+
+.clock-label {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: rgba(136, 153, 170, 0.6);
+  margin-top: 2px;
+}
+
+.clock-active {
+  border-color: var(--cyan, #00e5ff);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
 }
 
 .clock-active .clock-time {
   color: var(--cyan, #00e5ff);
-  text-shadow: 0 0 8px var(--cyan, #00e5ff), 0 0 20px rgba(0, 229, 255, 0.4);
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+}
+
+.clock-warning {
+  border-color: #FF8C00;
 }
 
 .clock-warning .clock-time {
-  color: var(--yellow, #ffd740);
-  text-shadow: 0 0 8px var(--yellow, #ffd740);
+  color: #FF8C00;
+}
+
+.clock-critical {
+  border-color: var(--neon-red, #ff1744);
 }
 
 .clock-critical .clock-time {
   color: var(--neon-red, #ff1744) !important;
-  text-shadow: 0 0 8px var(--neon-red, #ff1744);
+  text-shadow: 0 0 8px rgba(255, 23, 68, 0.5);
 }
 
 .clock-pulsing {
-  animation: clock-pulse 0.8s ease-in-out infinite;
+  animation: clock-pulse 0.5s ease-in-out infinite alternate;
 }
 
 @keyframes clock-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  from { opacity: 0.7; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
 }

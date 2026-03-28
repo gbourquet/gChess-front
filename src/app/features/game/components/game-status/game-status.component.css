@@ -19,15 +19,13 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  padding: 4px 12px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 14px;
   background: rgba(0, 229, 255, 0.05);
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
-  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 20px;
   color: var(--text-primary, #e8e8f0);
 }
 
@@ -42,12 +40,12 @@
 }
 
 .turn-indicator mat-icon.black-turn {
-  color: var(--magenta, #e040fb);
+  color: var(--magenta, #FF2D9B);
 }
 
 .turn-text {
   color: var(--text-primary, #e8e8f0);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 mat-chip-set {
@@ -55,10 +53,9 @@ mat-chip-set {
 }
 
 mat-chip {
-  font-family: 'Rajdhani', sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  letter-spacing: 1px !important;
+  font-family: 'Fredoka', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
   min-width: 180px;
   text-align: center;
 }
@@ -67,17 +64,15 @@ mat-chip {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
+  padding: 6px 16px;
   background: rgba(255, 23, 68, 0.15);
   border: 1px solid var(--neon-red, #ff1744);
   color: var(--neon-red, #ff1744);
-  font-family: 'Orbitron', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 0 15px rgba(255, 23, 68, 0.3);
-  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(255, 23, 68, 0.25);
 }
 
 .game-over-message mat-icon {
@@ -95,7 +90,7 @@ mat-chip {
   }
 
   .turn-indicator {
-    font-size: 11px;
-    padding: 3px 8px;
+    font-size: 12px;
+    padding: 3px 10px;
   }
 }

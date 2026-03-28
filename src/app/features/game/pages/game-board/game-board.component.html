@@ -2,93 +2,30 @@
   @if (gameState(); as state) {
     <div class="game-grid">
 
-      <!-- LEFT COLUMN: Player panels + clocks -->
-      <div class="sidebar-left">
-        <!-- Opponent panel (top) -->
-        <div class="player-slot opponent-slot">
-          @if (state.myColor === 'WHITE') {
-            @if (opponentPlayer(); as opponent) {
-              <app-player-info
-                [player]="opponent"
-                [color]="'BLACK'"
-                [isCurrentPlayer]="state.currentSide === 'BLACK'"
-              />
-            }
-            @if (blackTimeMs() !== null) {
-              <app-game-clock
-                [remainingMs]="blackTimeMs()"
-                [isActive]="state.currentSide !== state.myColor"
-              />
-            }
-          } @else {
-            @if (opponentPlayer(); as opponent) {
-              <app-player-info
-                [player]="opponent"
-                [color]="'WHITE'"
-                [isCurrentPlayer]="state.currentSide === 'WHITE'"
-              />
-            }
-            @if (whiteTimeMs() !== null) {
-              <app-game-clock
-                [remainingMs]="whiteTimeMs()"
-                [isActive]="state.currentSide !== state.myColor"
-              />
-            }
+      <!-- LEFT COLUMN: Adversaire (haut) + statut + plateau + Joueur (bas) -->
+      <div class="board-center" [style.--board-size.px]="boardSize()">
+
+        <!-- Panneau adversaire (haut) -->
+        <div class="opponent-panel">
+          @if (topPlayer(); as player) {
+            <app-player-info
+              [player]="player"
+              [color]="topColor()"
+              [isCurrentPlayer]="state.currentSide === topColor()"
+            />
           }
-        </div>
-
-        <div class="sidebar-spacer"></div>
-
-        <!-- My panel (bottom) -->
-        <div class="player-slot my-slot">
-          @if (state.myColor === 'WHITE') {
-            @if (myPlayer(); as player) {
-              <app-player-info
-                [player]="player"
-                [color]="'WHITE'"
-                [isCurrentPlayer]="state.currentSide === 'WHITE'"
-              />
-            }
-            @if (whiteTimeMs() !== null) {
-              <app-game-clock
-                [remainingMs]="whiteTimeMs()"
-                [isActive]="isMyTurn() ?? false"
-              />
-            }
-          } @else {
-            @if (myPlayer(); as player) {
-              <app-player-info
-                [player]="player"
-                [color]="'BLACK'"
-                [isCurrentPlayer]="state.currentSide === 'BLACK'"
-              />
-            }
-            @if (blackTimeMs() !== null) {
-              <app-game-clock
-                [remainingMs]="blackTimeMs()"
-                [isActive]="isMyTurn() ?? false"
-              />
-            }
+          @if (topTimeMs() !== null) {
+            <app-game-clock
+              [remainingMs]="topTimeMs()"
+              [isActive]="state.currentSide === topColor()"
+            />
           }
-        </div>
-      </div>
-
-      <!-- CENTER COLUMN: Status + Board + Navigation -->
-      <div class="board-center">
-        <!-- Game Status -->
-        <div class="status-section">
-          <app-game-status
-            [currentSide]="state.currentSide"
-            [gameStatus]="state.gameStatus"
-            [isMyTurn]="isMyTurn() ?? false"
-            [isCheck]="state.isCheck"
-            [winnerColor]="winnerColor()"
-          />
         </div>
 
         <!-- Chess board -->
         <div class="board-wrapper">
           <app-chess-board
+            #boardRef
             [position]="displayPosition()"
             [orientation]="boardOrientation()"
             [draggable]="isAtLatestMove() && (isMyTurn() ?? false) && (state.gameStatus === 'IN_PROGRESS' || state.gameStatus === 'CHECK')"
@@ -97,50 +34,90 @@
             [lastMove]="displayLastMove()"
             [isCheck]="state.isCheck"
             [currentSide]="state.currentSide === 'WHITE' ? 'white' : 'black'"
+            [showFrameControls]="false"
             (moveChange)="onMoveAttempt($event)"
             (flipRequest)="flipBoard()"
           />
+
+          <!-- Indicateur mode historique -->
+          @if (!isAtLatestMove()) {
+            <div class="review-mode-badge">
+              <mat-icon>history</mat-icon>
+              Historique
+            </div>
+          }
+
+          <!-- Overlay de fin de partie -->
+          @if (isGameOver()) {
+            <div class="game-end-overlay">
+              @if (gameEndOverlay(); as overlay) {
+                <div class="game-end-card" [style.border-color]="overlay.borderColor">
+                  <mat-icon [style.color]="overlay.borderColor">{{ overlay.icon }}</mat-icon>
+                  <h2 class="game-end-title" [style.color]="overlay.borderColor">{{ overlay.title }}</h2>
+                  <p class="game-end-description">{{ overlay.description }}</p>
+                  <button class="game-end-btn" (click)="returnToLobby()">
+                    <mat-icon>arrow_back</mat-icon>
+                    Retour au lobby
+                  </button>
+                </div>
+              }
+            </div>
+          }
         </div>
 
-        <!-- Move navigation controls -->
-        <div class="move-navigation">
-          <button
-            class="nav-btn"
-            [disabled]="!canGoPrevious()"
-            (click)="goToPreviousMove()"
-            title="Début">
-            &#8676;
-          </button>
-          <button
-            class="nav-btn"
-            [disabled]="!canGoPrevious()"
-            (click)="goToPreviousMove()"
-            title="Précédent">
-            &#8249;
-          </button>
-          <button
-            class="nav-btn"
-            [disabled]="!canGoNext()"
-            (click)="goToNextMove()"
-            title="Suivant">
-            &#8250;
-          </button>
-          <button
-            class="nav-btn"
-            [disabled]="!canGoNext()"
-            (click)="goToNextMove()"
-            title="Fin">
-            &#8677;
-          </button>
+        <!-- Panneau joueur (bas) -->
+        <div class="my-panel">
+          @if (bottomPlayer(); as player) {
+            <app-player-info
+              [player]="player"
+              [color]="topColor() === 'WHITE' ? 'BLACK' : 'WHITE'"
+              [isCurrentPlayer]="state.currentSide !== topColor()"
+            />
+          }
+          @if (bottomTimeMs() !== null) {
+            <app-game-clock
+              [remainingMs]="bottomTimeMs()"
+              [isActive]="state.currentSide !== topColor()"
+            />
+          }
         </div>
+
       </div>
 
-      <!-- RIGHT COLUMN: Notation + Chat + Controls -->
+      <!-- RIGHT COLUMN: Historique + Draw offer + Contrôles -->
       <div class="sidebar-right">
 
-        <!-- Move history (notation pad) -->
+        <!-- Game Status -->
+        <app-game-status
+          [currentSide]="state.currentSide"
+          [gameStatus]="state.gameStatus"
+          [isMyTurn]="isMyTurn() ?? false"
+          [isCheck]="state.isCheck"
+          [winnerColor]="winnerColor()"
+        />
+
+        <!-- Board controls above notation -->
+        <div class="board-controls">
+          <button class="ctrl-board-btn" (click)="boardRef.toggleCoords()" title="Afficher / masquer les coordonnées">
+            <span>&#128065;</span>
+          </button>
+          <button class="ctrl-board-btn" (click)="flipBoard()" title="Retourner le plateau">
+            <span>&#8635;</span>
+          </button>
+        </div>
+
+        <!-- Move history (avec nav intégrée) -->
         <div class="notation-section">
-          <app-move-history [moveHistory]="state.moveHistory" />
+          <app-move-history
+            [moveHistory]="state.moveHistory"
+            [activeIndex]="currentMoveIndex()"
+            [canGoPrevious]="canGoPrevious()"
+            [canGoNext]="canGoNext()"
+            (goToFirst)="goToFirstMove()"
+            (goPrevious)="goToPreviousMove()"
+            (goNext)="goToNextMove()"
+            (goToLast)="goToLastMove()"
+          />
         </div>
 
         <!-- Draw offer notification -->
@@ -162,19 +139,6 @@
             </div>
           </div>
         }
-
-        <!-- Chat shell (UI only) -->
-        <div class="chat-section">
-          <div class="chat-header">CHAT</div>
-          <div class="chat-messages">
-            <p class="chat-placeholder">Le chat sera disponible prochainement</p>
-          </div>
-          <div class="quick-chat-buttons">
-            <button class="quick-chat-btn" disabled>Good Luck!</button>
-            <button class="quick-chat-btn" disabled>Well Played</button>
-            <button class="quick-chat-btn" disabled>Thanks</button>
-          </div>
-        </div>
 
         <!-- Game controls -->
         <div class="game-controls">

@@ -1,26 +1,40 @@
 <mat-card class="move-history-card">
   <div class="history-header">
-    <span class="history-title">MOVE HISTORY</span>
+    <span class="history-title">NOTATION</span>
   </div>
   <mat-card-content #moveListContainer>
     @if (isEmpty()) {
       <div class="empty-message">
-        <span>No moves yet</span>
+        <span>Aucun coup joué</span>
       </div>
     } @else {
-      <mat-list class="move-list">
+      <div class="moves-flow">
         @for (pair of movePairs(); track pair.number) {
-          <mat-list-item>
-            <div class="move-pair">
-              <span class="move-number">{{ pair.number }}.</span>
-              <span class="move white-move">{{ formatMove(pair.white) }}</span>
-              @if (pair.black) {
-                <span class="move black-move">{{ formatMove(pair.black) }}</span>
-              }
-            </div>
-          </mat-list-item>
+          <span class="move-number">{{ pair.number }}.</span>
+          @if (pair.whiteIdx !== null) {
+            <span
+              class="move"
+              [class.move-active]="isActive(pair.whiteIdx)"
+              [attr.data-move-index]="pair.whiteIdx">
+              {{ san(pair.whiteIdx) }}
+            </span>
+          }
+          @if (pair.blackIdx !== null) {
+            <span
+              class="move"
+              [class.move-active]="isActive(pair.blackIdx)"
+              [attr.data-move-index]="pair.blackIdx">
+              {{ san(pair.blackIdx) }}
+            </span>
+          }
         }
-      </mat-list>
+      </div>
     }
   </mat-card-content>
+  <div class="move-nav-bar">
+    <button class="nav-btn" [disabled]="!canGoPrevious()" (click)="goToFirst.emit()" title="Début">&#8676;</button>
+    <button class="nav-btn" [disabled]="!canGoPrevious()" (click)="goPrevious.emit()" title="Précédent">&#8249;</button>
+    <button class="nav-btn" [disabled]="!canGoNext()" (click)="goNext.emit()" title="Suivant">&#8250;</button>
+    <button class="nav-btn" [disabled]="!canGoNext()" (click)="goToLast.emit()" title="Fin">&#8677;</button>
+  </div>
 </mat-card>

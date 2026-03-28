@@ -91,13 +91,20 @@ export class GameReviewComponent implements OnInit {
     return snapshots;
   });
 
+  boardFlipped = signal(false);
+
   boardOrientation = computed<'white' | 'black'>(() => {
     const summary = this.gameSummary();
     const username = this.tokenStorage.getUser()?.username;
-    if (!summary || !username) return 'white';
-    if (username === summary.blackUsername) return 'black';
-    return 'white';
+    const flipped = this.boardFlipped();
+    let base: 'white' | 'black' = 'white';
+    if (summary && username && username === summary.blackUsername) base = 'black';
+    return (base === 'white') !== flipped ? 'white' : 'black';
   });
+
+  flipBoard(): void {
+    this.boardFlipped.update(v => !v);
+  }
 
   // Top = opponent side, bottom = current player side
   topUsername = computed(() => {
@@ -188,7 +195,10 @@ export class GameReviewComponent implements OnInit {
 
     if (this.gameSummary()) {
       moves$.subscribe({
-        next: (dtos) => { this.moveDTOs.set(dtos); this.loading.set(false); },
+        next: (dtos) => {
+          this.moveDTOs.set(dtos);
+          this.loading.set(false);
+        },
         error: () => { this.error.set('Impossible de charger les coups de cette partie'); this.loading.set(false); },
       });
     } else {
@@ -205,6 +215,14 @@ export class GameReviewComponent implements OnInit {
         },
         error: () => { this.error.set('Impossible de charger les coups de cette partie'); this.loading.set(false); },
       });
+    }
+  }
+
+  resultLabel(result: 'WIN' | 'LOSS' | 'DRAW'): string {
+    switch (result) {
+      case 'WIN':  return 'Victoire';
+      case 'LOSS': return 'Défaite';
+      case 'DRAW': return '½-½';
     }
   }
 

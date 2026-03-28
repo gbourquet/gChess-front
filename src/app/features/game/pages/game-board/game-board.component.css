@@ -1,97 +1,121 @@
 .game-board-container {
   padding: 12px 16px;
   box-sizing: border-box;
-  height: calc(100vh - 88px);
+  height: calc(100vh - 52px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
+  /* Mobile-style room background */
+  background: linear-gradient(180deg, #08131F 0%, #0B1E30 50%, #0A1828 100%);
 }
 
+/* Teal side panels */
+.game-board-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 120px;
+  background: linear-gradient(90deg, rgba(10, 53, 53, 0.7) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.game-board-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 120px;
+  background: linear-gradient(270deg, rgba(10, 53, 53, 0.7) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.game-board-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 2-column grid: board area | sidebar */
 .game-grid {
   display: grid;
-  grid-template-columns: 240px 1fr 260px;
+  grid-template-columns: 1fr 260px;
   gap: 12px;
   flex: 1;
   align-items: start;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
 }
 
-/* LEFT COLUMN */
-.sidebar-left {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-}
-
-.player-slot {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.opponent-slot {
-  /* top of left column */
-}
-
-.my-slot {
-  /* bottom of left column */
-}
-
-.sidebar-spacer {
-  flex: 1;
-}
-
-/* CENTER COLUMN */
+/* LEFT COLUMN: vertical stack */
 .board-center {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
 }
 
-.status-section {
-  flex-shrink: 0;
-  width: 100%;
+/* Opponent panel (above board) */
+.opponent-panel {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  width: calc(var(--board-size, 480px) + 40px);
 }
 
+.opponent-panel app-player-info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* My panel (below board) */
+.my-panel {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  width: calc(var(--board-size, 480px) + 40px);
+}
+
+.my-panel app-player-info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Board wrapper — relative for overlay positioning */
 .board-wrapper {
   flex-shrink: 0;
+  position: relative;
 }
 
-/* Move navigation buttons */
-.move-navigation {
+/* Board controls (above notation panel) */
+.board-controls {
   display: flex;
+  justify-content: flex-end;
   gap: 4px;
-  justify-content: center;
-  width: 100%;
-  margin-top: 4px;
 }
 
-/* Nav buttons: glowing arrows */
-.nav-btn {
-  background: transparent;
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
+.ctrl-board-btn {
+  background: var(--bg-card, #0A1E30);
+  border: 1px solid rgba(0, 229, 255, 0.2);
   color: var(--cyan, #00e5ff);
-  width: 40px;
-  height: 32px;
-  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
   cursor: pointer;
-  font-family: 'Share Tech Mono', monospace;
-  transition: all 0.2s;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  padding: 0;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 
-  &:hover:not([disabled]) {
+  &:hover {
     border-color: var(--cyan, #00e5ff);
-    box-shadow: 0 0 8px var(--cyan-glow, rgba(0, 229, 255, 0.25));
-    color: #ffffff;
-  }
-
-  &[disabled] {
-    opacity: 0.2;
-    cursor: not-allowed;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
   }
 }
 
@@ -102,18 +126,18 @@
   gap: 10px;
 }
 
-/* Notation section: CRT terminal */
+/* Notation section */
 .notation-section {
-  height: 260px;
+  height: 320px;
   flex-shrink: 0;
 }
 
 /* Draw offer */
 .draw-offer-card {
-  background: rgba(255, 215, 64, 0.1);
-  border: 1px solid var(--yellow, #ffd740);
-  box-shadow: 0 0 10px rgba(255, 215, 64, 0.2);
-  border-radius: 0;
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid var(--yellow, #FFD700);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
+  border-radius: 12px;
 }
 
 .draw-offer-content {
@@ -128,14 +152,14 @@
   font-size: 28px;
   width: 28px;
   height: 28px;
-  color: var(--yellow, #ffd740);
+  color: var(--yellow, #FFD700);
 }
 
 .draw-offer-content p {
   margin: 0;
-  font-size: 13px;
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 600;
+  font-size: 14px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
   color: var(--text-primary, #e8e8f0);
   text-align: center;
 }
@@ -149,12 +173,11 @@
 .draw-btn {
   flex: 1;
   border: none;
-  border-radius: 2px;
+  border-radius: 8px;
   padding: 6px 10px;
-  font-size: 12px;
-  font-weight: 700;
-  font-family: 'Rajdhani', sans-serif;
-  letter-spacing: 1px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Fredoka', sans-serif;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -191,65 +214,7 @@
   }
 }
 
-/* Chat shell */
-.chat-section {
-  background: var(--arena-surface, #111118);
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.chat-header {
-  background: rgba(0, 229, 255, 0.05);
-  border-bottom: 1px solid var(--arena-border-bright, #3a3a5a);
-  color: var(--cyan, #00e5ff);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  padding: 5px 10px;
-}
-
-.chat-messages {
-  padding: 10px;
-  min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.chat-placeholder {
-  margin: 0;
-  font-size: 11px;
-  color: var(--text-secondary, #6868a0);
-  text-align: center;
-  font-family: 'Share Tech Mono', monospace;
-}
-
-.quick-chat-buttons {
-  display: flex;
-  gap: 4px;
-  padding: 6px 8px;
-  border-top: 1px solid var(--arena-border-bright, #3a3a5a);
-  flex-wrap: wrap;
-}
-
-.quick-chat-btn {
-  flex: 1;
-  min-width: 70px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
-  color: var(--text-secondary, #6868a0);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  padding: 3px 8px;
-  border-radius: 2px;
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-/* Game controls: beveled neon buttons */
+/* Game controls */
 .game-controls {
   display: flex;
   flex-direction: column;
@@ -264,15 +229,12 @@
   width: 100%;
   padding: 8px 12px;
   border: 1px solid;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
-  border-radius: 0;
+  border-radius: 10px;
 
   mat-icon {
     font-size: 15px;
@@ -298,35 +260,35 @@
 }
 
 .ctrl-draw {
-  background: rgba(255, 215, 64, 0.1);
-  border-color: var(--yellow, #ffd740);
-  color: var(--yellow, #ffd740);
+  background: rgba(255, 215, 0, 0.1);
+  border-color: var(--yellow, #FFD700);
+  color: var(--yellow, #FFD700);
 
   &:hover:not([disabled]) {
-    background: rgba(255, 215, 64, 0.2);
-    box-shadow: 0 0 12px rgba(255, 215, 64, 0.4);
+    background: rgba(255, 215, 0, 0.2);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
   }
 }
 
 .ctrl-takeback {
   background: rgba(0, 229, 255, 0.05);
-  border-color: var(--arena-border-bright, #3a3a5a);
-  color: var(--text-secondary, #6868a0);
+  border-color: rgba(0, 229, 255, 0.2);
+  color: var(--text-secondary, #8899AA);
 }
 
 .ctrl-abort {
-  background: rgba(104, 104, 160, 0.05);
-  border-color: var(--arena-border, #252535);
-  color: var(--text-secondary, #6868a0);
+  background: rgba(136, 153, 170, 0.05);
+  border-color: rgba(136, 153, 170, 0.2);
+  color: var(--text-secondary, #8899AA);
 }
 
 .ctrl-leave {
   background: rgba(255, 255, 255, 0.03);
-  border-color: var(--arena-border-bright, #3a3a5a);
-  color: var(--text-secondary, #6868a0);
+  border-color: rgba(0, 229, 255, 0.15);
+  color: var(--text-secondary, #8899AA);
 
   &:hover:not([disabled]) {
-    border-color: var(--cyan-dim, #0097a7);
+    border-color: var(--cyan-dim, #00b8cc);
     color: var(--cyan, #00e5ff);
   }
 }
@@ -335,9 +297,9 @@
 .loading-card {
   margin: 64px auto;
   max-width: 400px;
-  background: var(--arena-panel, #16161e);
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
-  border-radius: 0;
+  background: var(--arena-panel, #112030);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 16px;
 }
 
 .loading-content {
@@ -358,15 +320,15 @@
 
   h2 {
     margin: 0;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 18px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 20px;
     color: var(--text-primary, #e8e8f0);
   }
 
   p {
     margin: 0;
-    color: var(--text-secondary, #6868a0);
-    font-family: 'Rajdhani', sans-serif;
+    color: var(--text-secondary, #8899AA);
+    font-family: 'Fredoka', sans-serif;
   }
 }
 
@@ -375,56 +337,151 @@
   100% { transform: rotate(360deg); }
 }
 
+/* Review mode badge */
+.review-mode-badge {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px solid var(--yellow, #FFD700);
+  color: var(--yellow, #FFD700);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 5;
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+  white-space: nowrap;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* Game end overlay */
+.game-end-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 19, 31, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 4px;
+  backdrop-filter: blur(3px);
+}
+
+.game-end-card {
+  background: var(--arena-panel, #112030);
+  border: 2px solid;
+  border-radius: 16px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  max-width: 280px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+
+  mat-icon {
+    font-size: 52px;
+    width: 52px;
+    height: 52px;
+  }
+}
+
+.game-end-title {
+  margin: 0;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.game-end-description {
+  margin: 0;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  color: var(--text-secondary, #8899AA);
+}
+
+.game-end-btn {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid var(--cyan, #00e5ff);
+  color: var(--cyan, #00e5ff);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: rgba(0, 229, 255, 0.2);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+  }
+}
+
 /* Responsive */
-@media (max-width: 1200px) {
+@media (max-width: 1100px) {
   .game-grid {
-    grid-template-columns: 200px 1fr 220px;
+    grid-template-columns: 1fr 220px;
     gap: 10px;
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 880px) {
   .game-board-container {
     padding: 8px;
+    height: auto;
+    min-height: calc(100vh - 52px);
+    overflow: auto;
   }
 
   .game-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
     gap: 12px;
   }
 
-  .sidebar-left {
-    order: 1;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-    height: auto;
-  }
-
-  .player-slot {
-    flex: 1;
-    min-width: 180px;
-  }
-
-  .sidebar-spacer {
-    display: none;
-  }
-
   .board-center {
-    order: 2;
+    order: 1;
   }
 
   .sidebar-right {
-    order: 3;
+    order: 2;
   }
 
   .notation-section {
     height: 200px;
   }
+
+  /* Mobile: coord labels shrink to 12px → frame adds 36px instead of 40px */
+  .opponent-panel,
+  .my-panel {
+    width: calc(var(--board-size, 480px) + 36px);
+  }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .game-board-container {
     padding: 4px;
   }
