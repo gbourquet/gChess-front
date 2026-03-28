@@ -70,6 +70,27 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.boardFlipped.update(v => !v);
   }
 
+  // Top/bottom helpers — account for board orientation (including flip)
+  topColor = computed((): 'WHITE' | 'BLACK' =>
+    this.boardOrientation() === 'white' ? 'BLACK' : 'WHITE'
+  );
+  topPlayer = computed(() => {
+    const state = this.gameState();
+    if (!state) return null;
+    return this.topColor() === state.myColor ? this.myPlayer() : this.opponentPlayer();
+  });
+  bottomPlayer = computed(() => {
+    const state = this.gameState();
+    if (!state) return null;
+    return this.topColor() === state.myColor ? this.opponentPlayer() : this.myPlayer();
+  });
+  topTimeMs = computed(() =>
+    this.topColor() === 'WHITE' ? this.whiteTimeMs() : this.blackTimeMs()
+  );
+  bottomTimeMs = computed(() =>
+    this.topColor() === 'WHITE' ? this.blackTimeMs() : this.whiteTimeMs()
+  );
+
   // Move history navigation
   currentMoveIndex = signal<number | null>(null); // null = at latest move
 
@@ -135,6 +156,53 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     return index !== null && index < state.moveHistory.length - 1;
   });
 
+  // Computed: game is over
+  isGameOver = computed(() => {
+    const s = this.gameState()?.gameStatus;
+    return s === 'CHECKMATE' || s === 'STALEMATE' || s === 'DRAW' || s === 'RESIGNED' || s === 'TIMEOUT';
+  });
+
+  // Computed: overlay content for game end
+  gameEndOverlay = computed(() => {
+    const state = this.gameState();
+    if (!state) return null;
+    const s = state.gameStatus;
+    const winner = this.winnerColor();
+    const isWinner = winner !== null && winner === state.myColor;
+
+    switch (s) {
+      case 'CHECKMATE':
+        return {
+          icon: isWinner ? 'emoji_events' : 'sentiment_dissatisfied',
+          title: isWinner ? 'Victoire !' : 'Défaite',
+          description: isWinner
+            ? 'Vous avez mis votre adversaire en échec et mat !'
+            : 'Vous avez été mis en échec et mat.',
+          borderColor: isWinner ? '#00e676' : '#ff1744'
+        };
+      case 'STALEMATE':
+        return { icon: 'handshake', title: 'Pat', description: 'La partie se termine par un match nul (pat).', borderColor: '#FFD700' };
+      case 'DRAW':
+        return { icon: 'handshake', title: 'Match nul', description: 'La partie se termine par un match nul.', borderColor: '#FFD700' };
+      case 'RESIGNED':
+        return {
+          icon: isWinner ? 'emoji_events' : 'flag',
+          title: isWinner ? 'Victoire !' : 'Abandon',
+          description: isWinner ? 'Votre adversaire a abandonné.' : 'Vous avez abandonné la partie.',
+          borderColor: isWinner ? '#00e676' : '#ff1744'
+        };
+      case 'TIMEOUT':
+        return {
+          icon: isWinner ? 'emoji_events' : 'timer_off',
+          title: isWinner ? 'Victoire !' : 'Temps écoulé',
+          description: isWinner ? 'Temps écoulé pour votre adversaire.' : 'Votre temps est écoulé.',
+          borderColor: isWinner ? '#00e676' : '#ff1744'
+        };
+      default:
+        return null;
+    }
+  });
+
   // Computed: is at latest move
   isAtLatestMove = computed(() => {
     const state = this.gameState();
@@ -188,13 +256,13 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
     if (!gameId) {
       this.showError('ID de partie manquant');
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/lobby']);
       return;
     }
 
     if (!playerId) {
       this.showError('ID de joueur manquant');
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/lobby']);
       return;
     }
 
@@ -296,7 +364,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   leaveGame(): void {
     if (confirm('Voulez-vous vraiment quitter la partie ?')) {
       this.gameService.disconnect();
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/lobby']);
     }
   }
 
@@ -354,6 +422,29 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       horizontalPosition: 'center',
       verticalPosition: 'top'
     });
+  }
+
+  /**
+   * Jump to starting position (before any moves)
+   */
+  goToFirstMove(): void {
+    if (!this.gameState()?.moveHistory.length) return;
+    this.currentMoveIndex.set(-1);
+  }
+
+  /**
+   * Jump to latest move (live position)
+   */
+  goToLastMove(): void {
+    this.currentMoveIndex.set(null);
+  }
+
+  /**
+   * Return to lobby after game ends
+   */
+  returnToLobby(): void {
+    this.gameService.disconnect();
+    this.router.navigate(['/lobby']);
   }
 
   /**

@@ -5,6 +5,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(180deg, #08131F 0%, #0B1E30 50%, #0A1828 100%);
 }
 
 .spectator-badge {
@@ -20,12 +21,11 @@
 
 .spectator-badge mat-chip {
   font-size: 13px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
   padding: 10px 20px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .spectator-badge mat-chip mat-icon {
@@ -65,10 +65,10 @@
 .board-card {
   width: fit-content;
   position: relative;
-  background-color: #fff8e7;
-  border-radius: 24px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  border: none;
+  background-color: var(--bg-card, #0A1E30);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 229, 255, 0.15);
   flex-shrink: 0;
 }
 
@@ -88,8 +88,8 @@
   right: 0;
   bottom: 0;
   pointer-events: none;
-  border: 3px solid rgba(103, 58, 183, 0.3);
-  border-radius: 24px;
+  border: 2px solid rgba(255, 45, 155, 0.2);
+  border-radius: 12px;
 }
 
 .history-section {
@@ -109,13 +109,11 @@
 
 .actions button {
   min-width: 220px;
-  border-radius: 16px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
   padding: 10px 20px;
-  font-size: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   height: 40px;
 }
 
@@ -129,6 +127,9 @@
 .loading-card {
   margin: 64px auto;
   max-width: 400px;
+  background: var(--arena-panel, #112030);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 16px;
 }
 
 .loading-content {
@@ -144,44 +145,25 @@
   font-size: 48px;
   width: 48px;
   height: 48px;
-  color: rgba(103, 58, 183, 0.7);
+  color: var(--cyan, #00e5ff);
   animation: spin 2s linear infinite;
 }
 
 .loading-content h2 {
   margin: 0;
-  font-size: 24px;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.87);
+  font-size: 22px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  color: var(--text-primary, #e8e8f0);
 }
 
 .loading-content p {
   margin: 0;
-  color: rgba(0, 0, 0, 0.6);
+  font-family: 'Fredoka', sans-serif;
+  color: var(--text-secondary, #8899AA);
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-/* Responsive design */
-@media (max-width: 1200px) {
-  mat-grid-list {
-    display: flex !important;
-    flex-direction: column;
-  }
-
-  mat-grid-tile {
-    width: 100% !important;
-    height: auto !important;
-  }
-
-  .board-content {
-    order: 1;
-  }
-
-  .sidebar-content {
-    order: 2;
-  }
 }

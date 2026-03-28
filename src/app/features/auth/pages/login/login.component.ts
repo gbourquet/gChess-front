@@ -59,7 +59,7 @@ export class LoginComponent {
       next: () => {
         this.isLoading.set(false);
         this.snackBar.open('Connexion réussie !', 'Fermer', { duration: 3000 });
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/lobby']);
       },
       error: (error) => {
         this.isLoading.set(false);
