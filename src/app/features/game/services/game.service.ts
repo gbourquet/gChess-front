@@ -404,12 +404,25 @@ export class GameService {
       incrementSeconds: message.incrementSeconds
     });
 
-    // Initialize clock signals
-    this.whiteTimeMsSignal.set(message.whiteTimeRemainingMs ?? null);
-    this.blackTimeMsSignal.set(message.blackTimeRemainingMs ?? null);
+    // Initialize clock signals, accounting for time elapsed since lastMoveAt
+    let whiteTimeMs = message.whiteTimeRemainingMs ?? null;
+    let blackTimeMs = message.blackTimeRemainingMs ?? null;
+
+    const isActive = message.gameStatus === 'IN_PROGRESS' || message.gameStatus === 'CHECK';
+    if (isActive && message.lastMoveAt && message.moveHistory.length >= 2) {
+      const elapsedMs = Date.now() - new Date(message.lastMoveAt).getTime();
+      if (message.currentSide === 'WHITE' && whiteTimeMs !== null) {
+        whiteTimeMs = Math.max(0, whiteTimeMs - elapsedMs);
+      } else if (message.currentSide === 'BLACK' && blackTimeMs !== null) {
+        blackTimeMs = Math.max(0, blackTimeMs - elapsedMs);
+      }
+    }
+
+    this.whiteTimeMsSignal.set(whiteTimeMs);
+    this.blackTimeMsSignal.set(blackTimeMs);
 
     // Start clock for active games
-    if (message.gameStatus === 'IN_PROGRESS' || message.gameStatus === 'CHECK') {
+    if (isActive) {
       this.startClock();
     } else {
       this.stopClock();

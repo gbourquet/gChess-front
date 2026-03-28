@@ -44,6 +44,7 @@ export interface GameStateSyncMessage {
   blackTimeRemainingMs?: number;
   totalTimeSeconds?: number;
   incrementSeconds?: number;
+  lastMoveAt?: string;
 }
 
 export interface PlayerDisconnectedMessage {
