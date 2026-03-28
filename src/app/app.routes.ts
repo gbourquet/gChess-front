@@ -5,7 +5,7 @@ import { publicGuard } from './core/auth/guards/public.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'lobby',
     pathMatch: 'full'
   },
   {
@@ -40,6 +40,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'dashboard'
+    redirectTo: 'lobby'
   }
 ];

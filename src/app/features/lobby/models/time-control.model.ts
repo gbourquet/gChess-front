@@ -25,10 +25,10 @@ export const TIME_CONTROL_PRESETS: TimeControlPreset[] = [
 ];
 
 export const CATEGORY_LABELS: Record<TimeControlPreset['category'], string> = {
-  bullet: 'Bullet',
-  blitz: 'Blitz',
-  rapid: 'Rapide',
-  classical: 'Classique',
+  bullet: '⚡ Bullet',
+  blitz: '🔥 Blitz',
+  rapid: '⏱ Rapide',
+  classical: '♟ Classique',
 };
 
 export interface TimeControlSelection {

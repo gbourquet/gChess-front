@@ -46,9 +46,14 @@ export class HistoryListComponent implements OnInit {
 
     this.historyService.getGames().subscribe({
       next: (dtos) => {
-        const mapped = dtos.map(dto =>
-          this.historyService.toHistoryEntry(dto, currentUser.userId)
-        );
+        const mapped = dtos
+          .map(dto => this.historyService.toHistoryEntry(dto, currentUser.userId))
+          .sort((a, b) => {
+            if (!a.playedAt && !b.playedAt) return 0;
+            if (!a.playedAt) return 1;
+            if (!b.playedAt) return -1;
+            return new Date(b.playedAt).getTime() - new Date(a.playedAt).getTime();
+          });
         this.entries.set(mapped);
         this.loading.set(false);
       },
@@ -64,15 +69,7 @@ export class HistoryListComponent implements OnInit {
   }
 
   goToDashboard(): void {
-    this.router.navigate(['/dashboard']);
-  }
-
-  resultIcon(result: GameHistoryEntry['result']): string {
-    switch (result) {
-      case 'WIN':  return 'emoji_events';
-      case 'LOSS': return 'sentiment_dissatisfied';
-      case 'DRAW': return 'handshake';
-    }
+    this.router.navigate(['/lobby']);
   }
 
   resultLabel(result: GameHistoryEntry['result']): string {
@@ -83,11 +80,7 @@ export class HistoryListComponent implements OnInit {
     }
   }
 
-  resultColor(result: GameHistoryEntry['result']): string {
-    switch (result) {
-      case 'WIN':  return 'accent';
-      case 'LOSS': return 'warn';
-      case 'DRAW': return 'primary';
-    }
+  playerColor(entry: GameHistoryEntry): 'white' | 'black' {
+    return entry.opponentUsername === entry.blackUsername ? 'white' : 'black';
   }
 }

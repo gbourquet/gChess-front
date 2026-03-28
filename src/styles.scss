@@ -4,27 +4,34 @@
 // Import Material theme configuration
 @use './styles/material-theme';
 
-// CSS Custom Properties - Checkmate Arena palette
+// CSS Custom Properties - Mobile palette
 :root {
-  --arena-bg: #0a0a0f;
-  --arena-surface: #111118;
-  --arena-panel: #16161e;
-  --arena-border: #252535;
-  --arena-border-bright: #3a3a5a;
+  --arena-bg: #08131F;
+  --arena-surface: #0D1E2E;
+  --arena-panel: #112030;
+  --arena-border: #1A3040;
+  --arena-border-bright: #1E4060;
+  --bg-card: #0A1E30;
+  --bg-teal: #0A3535;
   --cyan: #00e5ff;
-  --cyan-dim: #0097a7;
+  --cyan-dim: #00b8cc;
   --cyan-glow: rgba(0, 229, 255, 0.25);
-  --magenta: #e040fb;
-  --magenta-dim: #7b1fa2;
-  --magenta-glow: rgba(224, 64, 251, 0.25);
-  --yellow: #ffd740;
+  --magenta: #FF2D9B;
+  --magenta-dim: #c0006a;
+  --magenta-glow: rgba(255, 45, 155, 0.25);
+  --yellow: #FFD700;
   --neon-green: #00e676;
   --neon-red: #ff1744;
+  --neon-pink: #FF2D9B;
+  --neon-gold: #FFD700;
   --text-primary: #e8e8f0;
-  --text-secondary: #6868a0;
+  --text-secondary: #8899AA;
   --text-cyan: #00e5ff;
-  --board-light: #254525;
-  --board-dark: #0d160d;
+  --player-name: #FF8C00;
+  --player-title: #4EDA72;
+  --clock-bg: #040C18;
+  --board-light: #E8D5A3;
+  --board-dark: #527A52;
 }
 
 // Global styles
@@ -35,12 +42,9 @@ html, body {
 }
 
 body {
-  font-family: 'Rajdhani', sans-serif;
-  background-color: var(--arena-bg);
-  background-image:
-    repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 50%),
-    repeating-linear-gradient(-45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 50%);
-  background-size: 8px 8px;
+  font-family: 'Fredoka', sans-serif;
+  background: linear-gradient(180deg, #08131F 0%, #0B1E30 60%, #0A1828 100%);
+  background-attachment: fixed;
   color: var(--text-primary);
 }
 

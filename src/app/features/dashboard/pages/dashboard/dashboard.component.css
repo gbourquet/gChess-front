@@ -12,12 +12,11 @@
 }
 
 .welcome-card {
-  background: linear-gradient(135deg, var(--arena-panel, #16161e) 0%, var(--arena-surface, #111118) 100%);
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
-  border-radius: 0;
+  background: linear-gradient(135deg, var(--arena-panel, #112030) 0%, var(--arena-surface, #0D1E2E) 100%);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 16px;
   padding: 28px 32px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 229, 255, 0.05);
-  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 229, 255, 0.04);
 }
 
 .welcome-card mat-card-header {
@@ -28,12 +27,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 26px;
+  font-weight: 600;
   color: var(--cyan, #00e5ff);
   text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
-  letter-spacing: 2px;
 }
 
 .welcome-card mat-card-title mat-icon {
@@ -44,7 +42,7 @@
 }
 
 .user-info {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 18px;
   font-weight: 500;
   margin: 8px 0;
@@ -52,17 +50,15 @@
 }
 
 .user-info strong {
-  color: var(--cyan, #00e5ff);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  color: var(--player-name, #FF8C00);
+  font-weight: 600;
 }
 
 .user-email {
-  font-size: 13px;
-  color: var(--text-secondary, #6868a0);
+  font-size: 14px;
+  color: var(--text-secondary, #8899AA);
   margin: 4px 0;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Fredoka', sans-serif;
 }
 
 .actions-section {
@@ -72,15 +68,14 @@
 }
 
 .action-card {
-  background: var(--arena-panel, #16161e);
-  border: 1px solid var(--arena-border, #252535);
-  border-radius: 0;
+  background: var(--bg-card, #0A1E30);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  border-radius: 16px;
   padding: 24px;
   transition: border-color 0.2s, box-shadow 0.2s;
-  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
 
   &:hover {
-    border-color: var(--arena-border-bright, #3a3a5a);
+    border-color: rgba(0, 229, 255, 0.3);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 229, 255, 0.08);
   }
 }
@@ -90,43 +85,36 @@
 }
 
 .action-card mat-card-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
   color: var(--text-primary, #e8e8f0);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
 }
 
 .action-card mat-card-content p {
   margin: 0 0 16px 0;
-  color: var(--text-secondary, #6868a0);
-  font-family: 'Rajdhani', sans-serif;
+  color: var(--text-secondary, #8899AA);
+  font-family: 'Fredoka', sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .find-game-button {
   width: 100%;
   height: 52px;
-  font-size: 14px;
-  font-weight: 700;
-  font-family: 'Rajdhani', sans-serif;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  background: rgba(0, 229, 255, 0.08);
-  color: var(--cyan, #00e5ff);
-  border: 1px solid var(--cyan-dim, #0097a7);
-  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Fredoka', sans-serif;
+  background: var(--cyan, #00e5ff);
+  color: #08131F;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
-  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
 
   &:hover {
-    background: rgba(0, 229, 255, 0.15);
-    border-color: var(--cyan, #00e5ff);
-    box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
-    text-shadow: 0 0 8px var(--cyan, #00e5ff);
+    background: #33eeff;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
   }
 
   mat-icon {
@@ -142,10 +130,9 @@
 
 .footer-section button {
   min-width: 180px;
-  color: var(--text-secondary, #6868a0);
-  border-color: var(--arena-border-bright, #3a3a5a);
-  font-family: 'Rajdhani', sans-serif;
-  letter-spacing: 1px;
+  color: var(--text-secondary, #8899AA);
+  border-color: rgba(0, 229, 255, 0.2);
+  font-family: 'Fredoka', sans-serif;
 
   mat-icon {
     margin-right: 8px;
@@ -163,6 +150,6 @@
   }
 
   .welcome-card mat-card-title {
-    font-size: 18px;
+    font-size: 20px;
   }
 }

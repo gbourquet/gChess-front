@@ -1,13 +1,17 @@
 h2 {
   text-align: center;
   margin-bottom: 16px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  color: var(--text-primary, #e8e8f0);
 }
 
 .promotion-message {
   text-align: center;
   margin-bottom: 24px;
   font-size: 16px;
-  color: rgba(0, 0, 0, 0.7);
+  font-family: 'Fredoka', sans-serif;
+  color: var(--text-secondary, #8899AA);
 }
 
 .promotion-options {
@@ -24,12 +28,16 @@ h2 {
   justify-content: center;
   padding: 24px 16px;
   min-height: 120px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 12px;
+  background: var(--bg-card, #0A1E30);
+  border: 1.5px solid rgba(0, 229, 255, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 
 .piece-button:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 229, 255, 0.2);
+  border-color: var(--cyan, #00e5ff);
 }
 
 .piece-symbol {
@@ -40,8 +48,9 @@ h2 {
 
 .piece-label {
   font-size: 14px;
-  font-weight: 500;
-  text-transform: uppercase;
+  font-weight: 600;
+  font-family: 'Fredoka', sans-serif;
+  color: var(--text-primary, #e8e8f0);
 }
 
 mat-dialog-content {

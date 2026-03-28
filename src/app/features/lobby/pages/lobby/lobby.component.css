@@ -9,12 +9,11 @@
 .lobby-card {
   width: 100%;
   max-width: 560px;
-  background: var(--arena-panel, #16161e);
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
-  border-radius: 0;
+  background: var(--arena-panel, #112030);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 16px;
   padding: 28px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 229, 255, 0.05);
-  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 229, 255, 0.04);
 }
 
 .category-section {
@@ -22,21 +21,14 @@
 }
 
 .category-title {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--cyan, #00e5ff);
   margin: 0 0 10px 0;
-  border-bottom: 1px solid var(--arena-border-bright, #3a3a5a);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.2);
   padding-bottom: 6px;
-  opacity: 0.8;
-
-  &::before {
-    content: '// ';
-    opacity: 0.4;
-  }
+  opacity: 0.9;
 }
 
 .presets-row {
@@ -46,27 +38,40 @@
 }
 
 .preset-button {
-  min-width: 72px;
-  font-family: 'Share Tech Mono', monospace;
-  font-weight: 400;
-  background: rgba(0, 229, 255, 0.04);
-  color: var(--text-secondary, #6868a0);
-  border: 1px solid var(--arena-border-bright, #3a3a5a);
-  border-radius: 2px;
-  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  padding: 14px 20px;
+  background: var(--bg-card, #0A1E30);
+  border: 1.5px solid rgba(0, 229, 255, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.08);
   cursor: pointer;
-  font-size: 12px;
   transition: all 0.2s;
-  letter-spacing: 0.5px;
-  clip-path: polygon(3px 0%, 100% 0%, calc(100% - 3px) 100%, 0% 100%);
 
   &:hover {
-    background: rgba(0, 229, 255, 0.1);
     border-color: var(--cyan, #00e5ff);
-    color: var(--cyan, #00e5ff);
-    box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
-    text-shadow: 0 0 6px rgba(0, 229, 255, 0.5);
+    box-shadow: 0 0 14px rgba(0, 229, 255, 0.25);
+    background: rgba(0, 229, 255, 0.08);
   }
+}
+
+.preset-time {
+  font-family: 'Orbitron', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cyan, #00e5ff);
+  letter-spacing: 1px;
+}
+
+.preset-category {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--player-title, #4EDA72);
+  letter-spacing: 1px;
+  margin-top: 2px;
 }
 
 .custom-section {
@@ -76,23 +81,19 @@
 
 .custom-button {
   width: 100%;
-  background: rgba(0, 229, 255, 0.06);
+  background: rgba(0, 229, 255, 0.08);
   color: var(--cyan, #00e5ff);
-  border: 1px solid var(--cyan-dim, #0097a7);
-  border-radius: 0;
+  border: 1.5px solid var(--cyan, #00e5ff);
+  border-radius: 10px;
   padding: 10px;
   cursor: pointer;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
   transition: all 0.2s;
-  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
 
   &:hover {
-    background: rgba(0, 229, 255, 0.14);
-    border-color: var(--cyan, #00e5ff);
-    box-shadow: 0 0 14px rgba(0, 229, 255, 0.3);
+    background: rgba(0, 229, 255, 0.15);
+    box-shadow: 0 0 14px rgba(0, 229, 255, 0.25);
   }
 }

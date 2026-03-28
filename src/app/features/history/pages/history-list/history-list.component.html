@@ -34,25 +34,23 @@
         <mat-card class="entry-card" (click)="onGameClick(entry)">
           <mat-card-content>
             <div class="entry-row">
-              <div class="result-section">
-                <mat-icon [color]="resultColor(entry.result)">{{ resultIcon(entry.result) }}</mat-icon>
-                <span class="result-label" [class]="'result-' + entry.result.toLowerCase()">
-                  {{ resultLabel(entry.result) }}
+              <!-- Barre couleur joueur à gauche -->
+              <div class="player-bar" [class]="'player-bar-' + playerColor(entry)"></div>
+
+              <!-- Infos centre -->
+              <div class="info-section">
+                <span class="opponent">vs {{ entry.opponentUsername }}</span>
+                <span class="entry-meta">
+                  {{ Math.ceil(entry.moveCount / 2) }} coups
+                  @if (entry.timeControlLabel) { · {{ entry.timeControlLabel }} }
                 </span>
               </div>
 
-              <div class="info-section">
-                <span class="opponent">vs {{ entry.opponentUsername }}</span>
-                <span class="move-count">{{ Math.ceil(entry.moveCount / 2) }} coups</span>
-              </div>
-
-              <div class="meta-section">
-                @if (entry.timeControlLabel) {
-                  <span class="time-control">
-                    <mat-icon class="small-icon">timer</mat-icon>
-                    {{ entry.timeControlLabel }}
-                  </span>
-                }
+              <!-- Résultat + date à droite -->
+              <div class="right-section">
+                <span class="result-badge" [class]="'result-badge-' + entry.result.toLowerCase()">
+                  {{ resultLabel(entry.result) }}
+                </span>
                 @if (entry.playedAt) {
                   <span class="played-at">{{ entry.playedAt | date:'dd/MM/yyyy' }}</span>
                 }

@@ -46,7 +46,7 @@ export class SpectateComponent implements OnInit, OnDestroy {
 
     if (!gameId) {
       console.error('[Spectate] No game ID provided');
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/lobby']);
       return;
     }
 
@@ -64,6 +64,6 @@ export class SpectateComponent implements OnInit, OnDestroy {
    */
   leaveSpectate(): void {
     this.spectateService.disconnect();
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/lobby']);
   }
 }

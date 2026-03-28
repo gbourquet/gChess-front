@@ -15,10 +15,10 @@
           <div class="presets-row">
             @for (preset of presetsByCategory(category); track preset.label) {
               <button
-                mat-raised-button
                 class="preset-button"
                 (click)="onPresetSelect(preset)">
-                {{ preset.label }}
+                <span class="preset-time">{{ preset.label }}</span>
+                <span class="preset-category">{{ categoryLabels[preset.category] }}</span>
               </button>
             }
           </div>
@@ -37,11 +37,5 @@
       </div>
     </mat-card-content>
 
-    <mat-card-actions align="end">
-      <button mat-button color="warn" (click)="authService.logout()">
-        <mat-icon>logout</mat-icon>
-        Se déconnecter
-      </button>
-    </mat-card-actions>
   </mat-card>
 </div>
