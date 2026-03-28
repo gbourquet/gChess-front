@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
@@ -92,6 +92,21 @@ export class GameReviewComponent implements OnInit {
   });
 
   boardFlipped = signal(false);
+  boardSize = signal(460);
+
+  @HostListener('window:resize')
+  onResize() { this.updateBoardSize(); }
+
+  private updateBoardSize() {
+    const w = window.innerWidth;
+    if (w <= 480) {
+      this.boardSize.set(Math.min(380, w - 48));
+    } else if (w <= 768) {
+      this.boardSize.set(Math.min(400, w - 60));
+    } else {
+      this.boardSize.set(460);
+    }
+  }
 
   boardOrientation = computed<'white' | 'black'>(() => {
     const summary = this.gameSummary();
@@ -189,6 +204,7 @@ export class GameReviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.updateBoardSize();
     const gameId = this.route.snapshot.paramMap.get('gameId')!;
 
     const moves$ = this.historyService.getMoves(gameId);
