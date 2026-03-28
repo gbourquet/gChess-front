@@ -2,8 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: calc(100vh - 88px);
-  padding: 32px 16px;
+  min-height: calc(100vh - 52px);
+  padding: 20px 12px;
 }
 
 .lobby-card {
@@ -95,5 +95,20 @@
   &:hover {
     background: rgba(0, 229, 255, 0.15);
     box-shadow: 0 0 14px rgba(0, 229, 255, 0.25);
+  }
+}
+
+@media (max-width: 480px) {
+  .lobby-card {
+    padding: 16px 12px;
+  }
+
+  .preset-button {
+    min-width: 72px;
+    padding: 12px 14px;
+  }
+
+  .preset-time {
+    font-size: 18px;
   }
 }

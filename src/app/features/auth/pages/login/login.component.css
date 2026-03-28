@@ -28,13 +28,21 @@ mat-card-header {
   border-bottom: 1px solid rgba(0, 229, 255, 0.15);
 }
 
-mat-card-title {
+.brand-logo {
   font-family: 'Fredoka', sans-serif;
-  font-size: 26px;
-  font-weight: 600;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
   margin-bottom: 8px;
+}
+
+.logo-g {
   color: var(--cyan, #00e5ff);
-  text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+  text-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
+}
+
+.logo-chess {
+  color: var(--text-primary, #e8e8f0);
 }
 
 mat-card-subtitle {

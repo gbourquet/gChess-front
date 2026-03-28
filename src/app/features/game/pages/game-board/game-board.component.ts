@@ -238,7 +238,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private updateBoardSize() {
     const width = window.innerWidth;
     if (width <= 480) {
-      this.boardSize.set(Math.min(320, width - 40));
+      this.boardSize.set(Math.min(380, width - 48));
     } else if (width <= 768) {
       this.boardSize.set(Math.min(400, width - 60));
     } else if (width <= 992) {
