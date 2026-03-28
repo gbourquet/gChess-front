@@ -58,10 +58,10 @@
   align-items: center;
 }
 
-/* Opponent panel (above board) */
+/* Opponent panel (above board) — horloge alignée en bas */
 .opponent-panel {
   display: flex;
-  align-items: stretch;
+  align-items: flex-end;
   gap: 10px;
   width: calc(var(--board-size, 480px) + 40px);
 }
@@ -71,10 +71,10 @@
   min-width: 0;
 }
 
-/* My panel (below board) */
+/* My panel (below board) — horloge alignée en haut */
 .my-panel {
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   gap: 10px;
   width: calc(var(--board-size, 480px) + 40px);
 }
