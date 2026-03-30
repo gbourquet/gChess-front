@@ -92,20 +92,16 @@ export class GameReviewComponent implements OnInit {
   });
 
   boardFlipped = signal(false);
-  boardSize = signal(460);
+  boardSize = signal(GameReviewComponent.computeBoardSize());
 
   @HostListener('window:resize')
-  onResize() { this.updateBoardSize(); }
+  onResize() { this.boardSize.set(GameReviewComponent.computeBoardSize()); }
 
-  private updateBoardSize() {
-    const w = window.innerWidth;
-    if (w <= 480) {
-      this.boardSize.set(Math.min(380, w - 48));
-    } else if (w <= 768) {
-      this.boardSize.set(Math.min(400, w - 60));
-    } else {
-      this.boardSize.set(460);
-    }
+  private static computeBoardSize(): number {
+    const w = document.documentElement.clientWidth;
+    if (w > 700) return 460;
+    const padding = w <= 600 ? 8 : 32;
+    return w - padding - 36;
   }
 
   boardOrientation = computed<'white' | 'black'>(() => {
@@ -204,7 +200,6 @@ export class GameReviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.updateBoardSize();
     const gameId = this.route.snapshot.paramMap.get('gameId')!;
 
     const moves$ = this.historyService.getMoves(gameId);

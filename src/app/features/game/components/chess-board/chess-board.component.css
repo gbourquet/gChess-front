@@ -135,13 +135,13 @@
 @media (max-width: 768px) {
   .file-label {
     font-size: 8px;
-    width: auto;
+    /* keep width: var(--sq) — must not override it or coords misalign */
     height: 12px;
   }
 
   .rank-label {
     font-size: 8px;
-    height: auto;
+    /* keep height: var(--sq) — must not override it or coords misalign */
     width: 12px;
   }
 

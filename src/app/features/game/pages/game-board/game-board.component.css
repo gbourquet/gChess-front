@@ -474,10 +474,9 @@
     height: 200px;
   }
 
-  /* Mobile: coord labels shrink to 12px → frame adds 36px instead of 40px */
   .opponent-panel,
   .my-panel {
-    width: calc(var(--board-size, 480px) + 36px);
+    width: 100%;
   }
 }
 
@@ -499,5 +498,72 @@
   .ctrl-btn {
     flex: 1;
     min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-board-container {
+    padding: 4px;
+    height: calc(100dvh - 52px);
+    overflow: hidden;
+  }
+
+  /* Switch from CSS Grid to flex column so height constraint propagates */
+  .game-grid {
+    display: flex;
+    flex-direction: column;
+    max-width: unset;
+    align-items: unset;
+    gap: 4px;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .board-center {
+    flex-shrink: 0;
+    gap: 4px;
+  }
+
+  .sidebar-right {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* Hide non-essential items to save space */
+  app-game-status,
+  .board-controls {
+    display: none;
+  }
+
+  /* Notation takes all remaining vertical space */
+  .notation-section {
+    height: unset !important;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .game-controls {
+    flex-shrink: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .ctrl-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 4px;
+    font-size: 11px;
+
+    mat-icon {
+      font-size: 13px;
+      width: 13px;
+      height: 13px;
+    }
   }
 }

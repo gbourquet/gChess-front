@@ -524,7 +524,8 @@ export class GameService {
       if (!state) return state;
       return {
         ...state,
-        gameStatus: message.gameStatus
+        gameStatus: message.gameStatus,
+        loserPlayerId: message.resignedPlayerId
       };
     });
   }

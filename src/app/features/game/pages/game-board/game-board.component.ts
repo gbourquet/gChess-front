@@ -56,7 +56,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
   // Local state
   private pendingMove = signal<{ from: string; to: string } | null>(null);
-  boardSize = signal<number>(480);
+  boardSize = signal<number>(this.computeBoardSize());
   boardFlipped = signal(false);
 
   // Computed: board orientation (my side by default, can be flipped)
@@ -235,17 +235,15 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.updateBoardSize();
   }
 
+  private computeBoardSize(): number {
+    const w = document.documentElement.clientWidth; // excludes scrollbar
+    if (w > 880) return 480;
+    const padding = w <= 600 ? 8 : 32; // matches CSS padding breakpoints
+    return w - padding - 36;            // 36 = rank labels (12×2) + wood border (6×2)
+  }
+
   private updateBoardSize() {
-    const width = window.innerWidth;
-    if (width <= 480) {
-      this.boardSize.set(Math.min(380, width - 48));
-    } else if (width <= 768) {
-      this.boardSize.set(Math.min(400, width - 60));
-    } else if (width <= 992) {
-      this.boardSize.set(Math.min(450, width - 80));
-    } else {
-      this.boardSize.set(480);
-    }
+    this.boardSize.set(this.computeBoardSize());
   }
 
   ngOnInit(): void {

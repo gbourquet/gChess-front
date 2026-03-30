@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -37,8 +37,18 @@ export class SpectateComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly spectateService = inject(SpectateService);
 
-  // Spectator state from service
   spectatorState = this.spectateService.spectatorState;
+  boardSize = signal(SpectateComponent.computeBoardSize());
+
+  @HostListener('window:resize')
+  onResize() { this.boardSize.set(SpectateComponent.computeBoardSize()); }
+
+  private static computeBoardSize(): number {
+    const w = document.documentElement.clientWidth;
+    if (w > 880) return 480;
+    const padding = w <= 600 ? 8 : 32;
+    return w - padding - 36;
+  }
 
   ngOnInit(): void {
     // Get game ID from route
