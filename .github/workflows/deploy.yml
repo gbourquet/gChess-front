@@ -1,0 +1,120 @@
+name: Deploy
+
+# Le front est construit sur les runners GitHub et publié sur GHCR.
+# Le serveur se contente de récupérer l'image et de redémarrer le
+# conteneur front — la stack (compose, nginx) est gérée par le repo
+# back : https://github.com/gbourquet/gChess (deploy/).
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-front
+  cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/gchess-front
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurer Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Tests
+        run: npm test -- --watch=false
+
+  build:
+    name: Build et publication de l'image
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authentification GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build et push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Déploiement sur le serveur
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Préparer la clé SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -p "${{ secrets.SSH_PORT || 22 }}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Pull et redémarrage
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ssh -i ~/.ssh/id_deploy -p "${{ secrets.SSH_PORT || 22 }}" \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "GHCR_TOKEN='$GHCR_TOKEN' bash -s" <<'ENDSSH'
+          set -euo pipefail
+          cd /opt/gchess
+
+          echo "$GHCR_TOKEN" | docker login ghcr.io -u token --password-stdin
+
+          sed -i "s|^FRONT_IMAGE=.*|FRONT_IMAGE=${{ env.IMAGE }}:${{ github.sha }}|" .env
+
+          docker compose pull front
+          docker compose up -d front
+
+          docker logout ghcr.io
+          docker image prune -f
+          ENDSSH
+
+      - name: Vérifier que le front répond
+        run: |
+          for i in $(seq 1 20); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://${{ vars.DOMAIN || 'gchess.sur-le-web.fr' }}/" || true)
+            if [ "$code" = "200" ]; then
+              echo "✅ Front en ligne"
+              exit 0
+            fi
+            echo "Tentative $i : / → $code"
+            sleep 5
+          done
+          echo "❌ Le front n'a pas répondu 200 après 100 s" >&2
+          exit 1

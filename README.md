@@ -13,7 +13,13 @@ The app uses Angular environments to configure backend URLs:
 | Environment | API | WebSocket |
 |-------------|-----|-----------|
 | Development | `http://localhost:8080` | `ws://localhost:8080` |
-| Production | `https://shimmering-spirit-production.up.railway.app` | `wss://shimmering-spirit-production.up.railway.app` |
+| Production | `https://gchess.sur-le-web.fr` | `wss://gchess.sur-le-web.fr` |
+
+In production the front and the API are served by the same nginx, so both
+share a single origin. Deployment is automated: any push to `master` builds
+the image, publishes it to GHCR and restarts the container on the server
+(see `.github/workflows/deploy.yml`). The stack itself — compose file, nginx
+config, TLS — lives in the backend repository under `deploy/`.
 
 ## Development server
 
