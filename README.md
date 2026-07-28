@@ -10,16 +10,22 @@ Angular 21 web chess client for the gChess platform.
 
 The app uses Angular environments to configure backend URLs:
 
-| Environment | API | WebSocket |
-|-------------|-----|-----------|
-| Development | `http://localhost:8080` | `ws://localhost:8080` |
-| Production | `https://gchess.sur-le-web.fr` | `wss://gchess.sur-le-web.fr` |
+| Environment | File | API | WebSocket |
+|-------------|------|-----|-----------|
+| Development | `src/environments/environment.development.ts` | `http://localhost:8080` | `ws://localhost:8080` |
+| Production | `src/environments/environment.ts` | your domain over `https` | your domain over `wss` |
 
-In production the front and the API are served by the same nginx, so both
-share a single origin. Deployment is automated: any push to `master` builds
-the image, publishes it to GHCR and restarts the container on the server
-(see `.github/workflows/deploy.yml`). The stack itself — compose file, nginx
-config, TLS — lives in the backend repository under `deploy/`.
+**Forking?** The production URLs are compiled into the bundle, so set your own
+domain in `src/environments/environment.ts` before building.
+
+In production the front and the API are served by the same nginx, so both share
+a single origin — no CORS preflight, and WebSockets need no extra config.
+
+Deployment is automated: any push to `master` runs the tests, builds the image,
+publishes it to GHCR and restarts the container over SSH (see
+`.github/workflows/deploy.yml`). The stack itself — compose file, nginx config,
+TLS — lives in the backend repository under `deploy/`, whose README documents
+the full server setup.
 
 ## Development server
 

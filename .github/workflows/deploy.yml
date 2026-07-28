@@ -138,9 +138,17 @@ jobs:
           ENDSSH
 
       - name: Vérifier que le front répond
+        env:
+          DOMAIN: ${{ vars.DOMAIN }}
         run: |
+          if [ -z "$DOMAIN" ]; then
+            echo "⚠️  Variable DOMAIN non définie : contrôle public ignoré."
+            echo "    La définir dans Settings → Secrets and variables → Actions → Variables."
+            exit 0
+          fi
+
           for i in $(seq 1 20); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "https://${{ vars.DOMAIN || 'gchess.sur-le-web.fr' }}/" || true)
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://$DOMAIN/" || true)
             if [ "$code" = "200" ]; then
               echo "✅ Front en ligne"
               exit 0
