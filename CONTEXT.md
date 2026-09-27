@@ -30,6 +30,10 @@ _Avoid_: Free time control
 The Side to move has its king attacked. Shown on the board, but not an Outcome: the Game goes on.
 _Avoid_: Check status
 
+**Premove**:
+A Move a Player queues during the opponent's turn, sent automatically as soon as it is their turn, if it is still legal.
+_Avoid_: Pre-move, queued move
+
 **Captured pieces**:
 The opponent's pieces a Side has taken so far, derived from the Position.
 _Avoid_: Material, trophies
